@@ -10,11 +10,12 @@ function! s:WAutocmds()
       autocmd VimEnter * :VimApm
       autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank()
       autocmd BufWritePre * :call TrimWhitespace()
-      "autocmd CursorHold * silent call CocActionAsync('highlight')
-      "autocmd BufWritePre *.go :call CocAction('runCommand', 'editor.action.organizeImport')
+      autocmd FileType qf nnoremap <buffer> <CR> <CR>:cclose<CR>
       autocmd FileType markdown setlocal spell
       autocmd FileType gitcommit setlocal spell
       autocmd FileType gitcommit setlocal complete+=kspell
+      autocmd BufEnter * lua require'completion'.on_attach()
+      autocmd BufEnter * lua require'diagnostic'.on_attach()
 
       " Spell using fzf
       function! FzfSpellSink(word)
@@ -25,6 +26,11 @@ function! s:WAutocmds()
         return fzf#run({'source': suggestions, 'sink': function("FzfSpellSink"), 'window': { 'width': 0.8, 'height': 0.8 } })
       endfunction
       nnoremap z= :call FzfSpell()<CR>
+
+      if (exists(':CocList'))
+        "autocmd CursorHold * silent call CocActionAsync('highlight')
+        "autocmd BufWritePre *.go :call CocAction('runCommand', 'editor.action.organizeImport')
+      endif
   augroup END
 endfunction
 

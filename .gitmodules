@@ -58,3 +58,12 @@
 [submodule ".local/share/nvim/site/autoload/vim-plug"]
 	path = .local/share/nvim/site/autoload/vim-plug
 	url = https://github.com/junegunn/vim-plug.git
+[submodule ".vim/plugged/nvim-lspconfig"]
+	path = .vim/plugged/nvim-lspconfig
+	url = https://github.com/neovim/nvim-lspconfig.git
+[submodule ".vim/plugged/completion-nvim"]
+	path = .vim/plugged/completion-nvim
+	url = https://github.com/nvim-lua/completion-nvim.git
+[submodule ".vim/plugged/diagnostic-nvim"]
+	path = .vim/plugged/diagnostic-nvim
+	url = https://github.com/nvim-lua/diagnostic-nvim.git

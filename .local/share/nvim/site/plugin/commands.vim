@@ -13,10 +13,12 @@ endfunction
 
 command! -nargs=* -bang PRg call RipgrepFzf(<q-args>, <bang>0)
 
-"command! -nargs=0 Format      :call CocAction('runCommand', 'eslint.executeAutofix')
-"command! -nargs=? Fold        :call CocAction('fold', <f-args>)
-"command! -nargs=0 OR          :call CocAction('runCommand', 'editor.action.organizeImport')
-"command! -nargs=0 JestInit    :call CocAction('runCommand', 'jest.init')
-"command! -nargs=0 Jest        :call CocAction('runCommand', 'jest.projectTest')
-"command! -nargs=0 JestCurrent :call CocAction('runCommand', 'jest.fileTest', ['%'])
-"command! -nargs=0 Prettier    :CocCommand prettier.formatFile
+if (exists(':CocList'))
+  "command! -nargs=0 Format      :call CocAction('runCommand', 'eslint.executeAutofix')
+  "command! -nargs=? Fold        :call CocAction('fold', <f-args>)
+  "command! -nargs=0 OR          :call CocAction('runCommand', 'editor.action.organizeImport')
+  "command! -nargs=0 JestInit    :call CocAction('runCommand', 'jest.init')
+  "command! -nargs=0 Jest        :call CocAction('runCommand', 'jest.projectTest')
+  "command! -nargs=0 JestCurrent :call CocAction('runCommand', 'jest.fileTest', ['%'])
+  "command! -nargs=0 Prettier    :CocCommand prettier.formatFile
+endif

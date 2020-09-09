@@ -21,10 +21,12 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'sheerun/vim-polyglot'
+Plug 'neovim/nvim-lspconfig'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'posva/vim-vue'
+Plug 'nvim-lua/completion-nvim'
+Plug 'nvim-lua/diagnostic-nvim'
+Plug 'sheerun/vim-polyglot'
 " Plug 'vim-syntastic/syntastic'
 " Plug 'sekel/vim-vue-syntastic'
 " Plug 'Quramy/tsuquyomi'
@@ -44,4 +46,3 @@ call plug#end()
 
 filetype plugin indent on
 syntax on
-
