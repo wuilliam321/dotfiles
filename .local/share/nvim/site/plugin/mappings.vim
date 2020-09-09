@@ -14,20 +14,15 @@ nnoremap <leader>phw :h <C-R>=expand("<cword>")<CR><CR>
 if (exists(':CocList'))
   nnoremap <leader>prw :CocSearch <C-R>=expand("<cword>")<CR><CR>
 
-  nmap <leader>gd <Plug>(coc-definition)
-  nmap <leader>gt <Plug>(coc-type-definition)
-  nmap <leader>gi <Plug>(coc-implementation)
-  nmap <leader>gr <Plug>(coc-references)
-  nmap <leader>rn <Plug>(coc-rename)
+  nmap <silent>gd <Plug>(coc-definition)
+  nmap <silent>gt <Plug>(coc-type-definition)
+  nmap <silent>gi <Plug>(coc-implementation)
+  nmap <silent>gr <Plug>(coc-references)
   nmap <silent> [g <Plug>(coc-diagnostic-prev)
   nmap <silent> ]g <Plug>(coc-diagnostic-next)
   nmap <silent> <leader>qf <Plug>(coc-fix-current)
-  "nmap <leader>a  <Plug>(coc-codeaction-selected)
-  "nmap <leader>a  <Plug>(coc-codeaction)
+  nmap <leader>rn <Plug>(coc-rename)
 
-  " Run jest for current test
-  "nnoremap <leader>te :call CocAction('runCommand', 'jest.singleTest')<CR>
-  "nnoremap <leader>tp :call CocAction('runCommand', 'jest.projectTest')<CR>
   nnoremap <leader>p :call CocAction('runCommand', 'prettier.formatFile')<CR>
 
   " Mappings for CoCList
