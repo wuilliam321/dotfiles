@@ -14,8 +14,6 @@ function! s:WAutocmds()
       autocmd FileType markdown setlocal spell
       autocmd FileType gitcommit setlocal spell
       autocmd FileType gitcommit setlocal complete+=kspell
-      autocmd BufEnter * lua require'completion'.on_attach()
-      autocmd BufEnter * lua require'diagnostic'.on_attach()
 
       " Spell using fzf
       function! FzfSpellSink(word)
@@ -28,8 +26,8 @@ function! s:WAutocmds()
       nnoremap z= :call FzfSpell()<CR>
 
       if (exists(':CocList'))
-        "autocmd CursorHold * silent call CocActionAsync('highlight')
-        "autocmd BufWritePre *.go :call CocAction('runCommand', 'editor.action.organizeImport')
+        autocmd CursorHold * silent call CocActionAsync('highlight')
+        autocmd BufWritePre *.go :call CocAction('runCommand', 'editor.action.organizeImport')
       endif
   augroup END
 endfunction
