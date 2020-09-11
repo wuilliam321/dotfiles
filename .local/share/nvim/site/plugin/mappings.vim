@@ -10,6 +10,11 @@ nnoremap <leader>pb :Buffers<CR>
 nnoremap <leader>pw :PRg <C-R>=expand("<cword>")<CR><CR>
 nnoremap <leader>phw :h <C-R>=expand("<cword>")<CR><CR>
 
+nnoremap <leader>h :wincmd h<CR>
+nnoremap <leader>j :wincmd j<CR>
+nnoremap <leader>k :wincmd k<CR>
+nnoremap <leader>l :wincmd l<CR>
+
 " GoTo code navigation.
 if (exists(':CocList'))
   nnoremap <leader>prw :CocSearch <C-R>=expand("<cword>")<CR><CR>
