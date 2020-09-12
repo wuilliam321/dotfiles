@@ -27,12 +27,13 @@ if (exists(':CocList'))
   nmap <silent> ]g <Plug>(coc-diagnostic-next)
   nmap <silent> <leader>qf <Plug>(coc-fix-current)
   nmap <leader>rn <Plug>(coc-rename)
+  nmap <leader>u :UndotreeToggle<CR>
 
   nnoremap <leader>p :call CocAction('runCommand', 'prettier.formatFile')<CR>
 
   " Mappings for CoCList
   " Show all diagnostics.
-  nnoremap <silent><nowait> <leader>d  :<C-u>CocList diagnostics<cr>
+  nnoremap <silent><nowait> <leader>di  :<C-u>CocList diagnostics<cr>
 
   " Manage extensions.
   "nnoremap <silent><nowait> <leader>e  :<C-u>CocList extensions<cr>
@@ -47,10 +48,10 @@ if (exists(':CocList'))
   "nnoremap <silent><nowait> <leader>s  :<C-u>CocList -I symbols<cr>
 
   " Do default action for nexleaderm.
-  nnoremap <silent><nowait> <leader>j  :<C-u>CocNext<CR>
+  "nnoremap <silent><nowait> <leader>j  :<C-u>CocNext<CR>
 
   " Do default action for preleader item.
-  nnoremap <silent><nowait> <leader>k  :<C-u>CocPrev<CR>
+  "nnoremap <silent><nowait> <leader>k  :<C-u>CocPrev<CR>
 
   " Use CTRL-S for selections ranges.
   " Requires 'textDocument/selectionRange' support of LS, ex: coc-tsserver
