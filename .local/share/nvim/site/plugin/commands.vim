@@ -11,4 +11,8 @@ function! RipgrepFzf(query, fullscreen)
   call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
 endfunction
 
-command! -nargs=* -bang PRg call RipgrepFzf(<q-args>, <bang>0)
+command! -nargs=* -bang PRg call  RipgrepFzf(<q-args>, <bang>0)
+command! -nargs=0 Format    :call CocAction('format')
+command! -nargs=0 OR        :call CocAction('runCommand', 'editor.action.organizeImport')
+command! -nargs=0 Prettier  :CocCommand prettier.formatFile
+

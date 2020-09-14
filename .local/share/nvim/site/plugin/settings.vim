@@ -25,11 +25,10 @@ set expandtab
 set cursorline
 set clipboard=unnamedplus
 set inccommand=nosplit
-set signcolumn="yes"
+set signcolumn=yes
 set colorcolumn=80
 set spelllang=en
 set completeopt=menuone,noinsert,noselect
-set omnifunc=v:lua.vim.lsp.omnifunc
 
 set list
 set listchars=nbsp:⦸

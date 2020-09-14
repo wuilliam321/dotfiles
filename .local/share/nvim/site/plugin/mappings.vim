@@ -20,30 +20,31 @@ xmap af <Plug>(coc-funcobj-a)
 xmap ic <Plug>(coc-classobj-i)
 xmap ac <Plug>(coc-classobj-a)
 
-nnoremap <silent> gD                 <cmd>lua vim.lsp.buf.declaration()<CR>
-nnoremap <silent> gd                 <cmd>lua vim.lsp.buf.definition()<CR>
-nnoremap <silent> K                  <cmd>lua vim.lsp.buf.hover()<CR>
-nnoremap <silent> gi                 <cmd>lua vim.lsp.buf.implementation()<CR>
-nnoremap <silent> <c-k>              <cmd>lua vim.lsp.buf.signature_help()<CR>
-nnoremap <silent> gt                 <cmd>lua vim.lsp.buf.type_definition()<CR>
-nnoremap <silent> gr                 <cmd>lua vim.lsp.buf.references()<CR>
-nnoremap <silent> g0                 <cmd>lua vim.lsp.buf.document_symbol()<CR>
-nnoremap <silent> gW                 <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
-nnoremap <silent> [g                 <cmd>NextDiagnosticCycle<CR>
-nnoremap <silent> ]g                 <cmd>PrevDiagnosticCycle<CR>
+nnoremap <silent> K                  :call <SID>show_documentation()<CR>
+nnoremap <silent> <c-k>              <cmd>CocAction('showSignatureHelp')<CR>
+nnoremap <silent> g0                 :<C-u>CocList outline<cr>
+nnoremap <silent> gW                 :<C-u>CocList -I symbols<cr>
+nmap     <silent> gd                 <Plug>(coc-definition)
+nmap     <silent> gi                 <Plug>(coc-implementation)
+nmap     <silent> gt                 <Plug>(coc-type-definition)
+nmap     <silent> gr                 <Plug>(coc-references)
+nmap     <silent> [g                 <Plug>(coc-diagnostic-prev)
+nmap     <silent> ]g                 <Plug>(coc-diagnostic-next)
 nmap     <silent> ff                 <Plug>(coc-fix-current)
 xmap     <silent> ff                 <Plug>(coc-fix-current)
-nnoremap <silent><leader>fd          <cmd>lua vim.lsp.buf.formatting()<CR>
-nnoremap <silent><leader>pd          <cmd>PrettierAsync<CR>
+nmap     <silent><leader>a           <Plug>(coc-codeaction)
+xmap     <silent><leader>as          <Plug>(coc-codeaction-selected)
+nmap     <silent><leader>as          <Plug>(coc-codeaction-selected)
+nmap     <silent><leader>rn          <Plug>(coc-rename)
+nnoremap <silent><leader>fd          <cmd>Format<CR>
+nnoremap <silent><leader>pd          <cmd>Prettier<CR>
 nnoremap <silent><leader>+           :vertical resize +5<CR>
 nnoremap <silent><leader>-           :vertical resize -5<CR>
 nnoremap <silent><leader>h           :wincmd h<CR>
 nnoremap <silent><leader>j           :wincmd j<CR>
 nnoremap <silent><leader>k           :wincmd k<CR>
 nnoremap <silent><leader>l           :wincmd l<CR>
-nnoremap <silent><nowait><leader>rn  <cmd>lua vim.lsp.buf.rename()<CR>
-nnoremap <silent><nowait><leader>a   <cmd>lua vim.lsp.buf.code_action()<CR>
-nnoremap <silent><nowait><leader>di  <cmd>OpenDiagnostic<CR>
+nnoremap <silent><nowait><leader>di  :<C-u>CocList diagnostics<cr>
 nmap <silent><leader>gh              :diffget //2<CR>
 nmap <silent><leader>gl              :diffget //3<CR>
 nmap <silent><leader>gs              :G<CR>
@@ -54,8 +55,18 @@ nmap <silent><leader>ss              <Plug>(Scalpel)
 inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
-"map <c-p> to manually trigger completion
-inoremap <silent><expr> <c-p> completion#trigger_completion()
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+inoremap <silent><expr> <c-space> coc#refresh()
+
+if exists('*complete_info')
+  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+else
+  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+endif
 
 "make Y behave more like C and D
 nnoremap Y y$
@@ -70,3 +81,17 @@ inoremap hh <esc> :w<CR>
 
 "x escapes visual mode
 xnoremap x <Esc>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
