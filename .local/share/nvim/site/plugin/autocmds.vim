@@ -25,10 +25,9 @@ function! s:WAutocmds()
       endfunction
       nnoremap z= :call FzfSpell()<CR>
 
-      if (exists(':CocList'))
-        autocmd CursorHold * silent call CocActionAsync('highlight')
-        autocmd BufWritePre *.go :call CocAction('runCommand', 'editor.action.organizeImport')
-      endif
+      autocmd BufWritePre *.go :call CocAction('runCommand', 'editor.action.organizeImport')
+      autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+      autocmd CompleteDone * if pumvisible() == 0 | pclose | endif
   augroup END
 endfunction
 

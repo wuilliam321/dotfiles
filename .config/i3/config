@@ -52,8 +52,8 @@ bindsym $mod+Shift+q kill
 #bindsym $mod+d exec --no-startup-id /home/wuilliam.lacruz/find_with.sh
 bindsym $mod+d exec --no-startup-id i3-sensible-terminal -t 'fzf' -e 'i3-dmenu-desktop --dmenu=/home/wuilliam.lacruz/go/bin/fzf'
 for_window [title="Terminal"] floating enable
-#bindsym $mod+d exec --no-startup-id i3-sensible-terminal -e 'i3-dmenu-desktop --dmenu=/home/wuilliam.lacruz/go/bin/fzf'
-#for_window [class="Gnome-terminal"] floating enable
+# for_window [title="Terminal"] move absolute position center
+# for_window [title="Terminal"] resize set 640 480
 
 # change focus
 bindsym $mod+h focus left

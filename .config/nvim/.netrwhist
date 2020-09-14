@@ -1,0 +1,12 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =9
+let g:netrw_dirhist_9='/home/wuilliam.lacruz/dotfiles/.local/share/nvim/site/plugin'
+let g:netrw_dirhist_8='/home/wuilliam.lacruz/Dev/rps-portal-plugin-schedules-management/src/components/DatePicker'
+let g:netrw_dirhist_7='/home/wuilliam.lacruz/Dev/rps-portal-plugin-schedules-management/src/components'
+let g:netrw_dirhist_6='/home/wuilliam.lacruz/Dev/rps-portal-plugin-schedules-management/src'
+let g:netrw_dirhist_5='/home/wuilliam.lacruz/Dev/rps-portal-plugin-schedules-management/src/pages/Schedules/components/SchedulesAdd'
+let g:netrw_dirhist_4='/home/wuilliam.lacruz/Dev/rps-portal-plugin-schedules-management/src/pages/Schedules/components'
+let g:netrw_dirhist_3='/home/wuilliam.lacruz/Dev/rps-portal-plugin-schedules-management/src/pages/Schedules/components/SchedulesAdd'
+let g:netrw_dirhist_2='/home/wuilliam.lacruz/dotfiles/.vim/plugged/vim-go'
+let g:netrw_dirhist_1='/home/wuilliam.lacruz/dotfiles/.vim/plugged/nvim-lspconfig'
+let g:netrw_dirhist_0='/home/wuilliam.lacruz/dotfiles/.vim'
