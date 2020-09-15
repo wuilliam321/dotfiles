@@ -13,7 +13,8 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
-Plug 'neovim/nvim-lspconfig'
+"Plug 'neovim/nvim-lspconfig'
+Plug 'wuilliam321/nvim-lspconfig', { 'branch': 'groovyls-support' }
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'posva/vim-vue'
 Plug 'nvim-lua/completion-nvim'

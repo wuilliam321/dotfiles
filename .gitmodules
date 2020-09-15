@@ -60,7 +60,7 @@
 	url = https://github.com/junegunn/vim-plug.git
 [submodule ".vim/plugged/nvim-lspconfig"]
 	path = .vim/plugged/nvim-lspconfig
-	url = https://github.com/neovim/nvim-lspconfig.git
+	url = https://github.com/wuilliam321/nvim-lspconfig.git
 [submodule ".vim/plugged/completion-nvim"]
 	path = .vim/plugged/completion-nvim
 	url = https://github.com/nvim-lua/completion-nvim.git

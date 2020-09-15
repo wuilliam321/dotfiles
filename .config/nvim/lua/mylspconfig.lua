@@ -6,6 +6,7 @@ nvim_lsp.html.setup{}
 nvim_lsp.jsonls.setup{}
 nvim_lsp.pyls.setup{}
 nvim_lsp.jdtls.setup{}
+nvim_lsp.groovyls.setup{}
 
 nvim_lsp.tsserver.setup{
   root_dir = nvim_lsp.util.root_pattern("tsconfig.json", ".git");
