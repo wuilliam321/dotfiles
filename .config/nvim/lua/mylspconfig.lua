@@ -1,12 +1,17 @@
 local nvim_lsp = require'nvim_lsp'
 
-nvim_lsp.vuels.setup{}
-nvim_lsp.gopls.setup{}
-nvim_lsp.html.setup{}
-nvim_lsp.jsonls.setup{}
-nvim_lsp.pyls.setup{}
-nvim_lsp.jdtls.setup{}
-nvim_lsp.groovyls.setup{}
+local on_attach_vim = function(client)
+  require'completion'.on_attach(client)
+  require'diagnostic'.on_attach(client)
+end
+
+nvim_lsp.vuels.setup{on_attach=on_attach_vim}
+nvim_lsp.gopls.setup{on_attach=on_attach_vim}
+nvim_lsp.html.setup{on_attach=on_attach_vim}
+nvim_lsp.jsonls.setup{on_attach=on_attach_vim}
+nvim_lsp.pyls.setup{on_attach=on_attach_vim}
+nvim_lsp.jdtls.setup{on_attach=on_attach_vim}
+nvim_lsp.groovyls.setup{on_attach=require'completion'.on_attach}
 
 nvim_lsp.tsserver.setup{
   root_dir = nvim_lsp.util.root_pattern("tsconfig.json", ".git");

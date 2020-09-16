@@ -14,8 +14,6 @@ function! s:WAutocmds()
       autocmd FileType markdown setlocal spell
       autocmd FileType gitcommit setlocal spell
       autocmd FileType gitcommit setlocal complete+=kspell
-      autocmd BufEnter * lua require'completion'.on_attach()
-      autocmd BufEnter * lua require'diagnostic'.on_attach()
 
       " Spell using fzf
       function! FzfSpellSink(word)
