@@ -3,7 +3,6 @@ filetype off
 let mapleader = " "
 
 call plug#begin('~/.vim/plugged')
-Plug 'neovim/nvim-lspconfig'
 Plug 'gruvbox-community/gruvbox'
 call plug#end()
 
@@ -24,6 +23,3 @@ set background=dark
 
 filetype plugin indent on
 syntax on
-
-lua package.loaded["mylspconfig"] = nil
-lua require("mylspconfig")
