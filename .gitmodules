@@ -1,6 +1,39 @@
-[submodule ".local/share/nvim/site/autoload/vim-plug"]
-	path = .local/share/nvim/site/autoload/vim-plug
-	url = https://github.com/junegunn/vim-plug.git
+[submodule ".vim/plugged/coc.nvim"]
+	path = .vim/plugged/coc.nvim
+	url = https://github.com/neoclide/coc.nvim.git
+[submodule ".vim/plugged/fzf"]
+	path = .vim/plugged/fzf
+	url = https://github.com/junegunn/fzf.git
+[submodule ".vim/plugged/fzf.vim"]
+	path = .vim/plugged/fzf.vim
+	url = https://github.com/junegunn/fzf.vim.git
 [submodule ".vim/plugged/gruvbox"]
 	path = .vim/plugged/gruvbox
 	url = https://github.com/gruvbox-community/gruvbox.git
+[submodule ".vim/plugged/undotree"]
+	path = .vim/plugged/undotree
+	url = https://github.com/mbbill/undotree.git
+[submodule ".vim/plugged/vim-airline"]
+	path = .vim/plugged/vim-airline
+	url = https://github.com/vim-airline/vim-airline.git
+[submodule ".vim/plugged/vim-airline-themes"]
+	path = .vim/plugged/vim-airline-themes
+	url = https://github.com/vim-airline/vim-airline-themes.git
+[submodule ".vim/plugged/vim-commentary"]
+	path = .vim/plugged/vim-commentary
+	url = https://github.com/tpope/vim-commentary.git
+[submodule ".vim/plugged/vim-fugitive"]
+	path = .vim/plugged/vim-fugitive
+	url = https://github.com/tpope/vim-fugitive.git
+[submodule ".vim/plugged/vim-polyglot"]
+	path = .vim/plugged/vim-polyglot
+	url = https://github.com/sheerun/vim-polyglot.git
+[submodule ".vim/plugged/vim-startify"]
+	path = .vim/plugged/vim-startify
+	url = https://github.com/mhinz/vim-startify.git
+[submodule ".vim/autoload/vim-plug"]
+	path = .vim/autoload/vim-plug
+	url = https://github.com/junegunn/vim-plug.git
+[submodule ".vim/plugged/vim-rooter"]
+	path = .vim/plugged/vim-rooter
+	url = git@github.com:airblade/vim-rooter.git

@@ -3,7 +3,18 @@ filetype off
 let mapleader = " "
 
 call plug#begin('~/.vim/plugged')
-    Plug 'gruvbox-community/gruvbox'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+Plug 'mbbill/undotree'
+Plug 'tpope/vim-fugitive'
+Plug 'sheerun/vim-polyglot'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'gruvbox-community/gruvbox'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'mhinz/vim-startify'
+Plug 'airblade/vim-rooter'
+Plug 'gruvbox-community/gruvbox'
 call plug#end()
 
 let &t_ti.="\e[1 q"
