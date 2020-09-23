@@ -190,6 +190,21 @@ command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 " Add `:OR` command for organize imports of the current buffer.
 command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
 
+" fzf
+function! FindGitRoot()
+  return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
+endfunction
+
+function! RipgrepFzf(query, fullscreen)
+  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s || true'
+  let initial_command = printf(command_fmt, shellescape(a:query))
+  let reload_command = printf(command_fmt, '{q}')
+  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command], "dir": FindGitRoot()}
+  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+endfunction
+
+command! -nargs=* -bang PRg call RipgrepFzf(<q-args>, <bang>0)
+
 " Add (Neo)Vim's native statusline support.
 " NOTE: Please see `:h coc-status` for integrations with external plugins that
 " provide custom statusline: lightline.vim, vim-airline.
@@ -224,6 +239,38 @@ nnoremap <leader>prw :CocSearch <C-R>=expand("<cword>")<CR><CR>
 nmap <silent><leader>gs              :G<CR>
 nmap <silent><leader>u               :UndotreeToggle<CR>
 nnoremap Y y$
+
+function! s:WAutocmds()
+  fun! TrimWhitespace()
+      let l:save = winsaveview()
+      keeppatterns %s/\s\+$//e
+      call winrestview(l:save)
+  endfun
+
+  augroup WAutocmds
+      autocmd!
+      autocmd BufWritePre * :call TrimWhitespace()
+      autocmd FileType qf nnoremap <buffer> <CR> <CR>:cclose<CR>
+      autocmd FileType markdown setlocal spell
+      autocmd FileType gitcommit setlocal spell
+      autocmd FileType gitcommit setlocal complete+=kspell
+
+      " Spell using fzf
+      function! FzfSpellSink(word)
+        exe 'normal! "_ciw'.a:word
+      endfunction
+      function! FzfSpell()
+        let suggestions = spellsuggest(expand("<cword>"))
+        return fzf#run({'source': suggestions, 'sink': function("FzfSpellSink"), 'window': { 'width': 0.8, 'height': 0.8 } })
+      endfunction
+      nnoremap z= :call FzfSpell()<CR>
+
+      autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+      autocmd CompleteDone * if pumvisible() == 0 | pclose | endif
+  augroup END
+endfunction
+
+call s:WAutocmds()
 
 filetype plugin indent on
 syntax on
