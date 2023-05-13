@@ -1,47 +1,68 @@
-{
+{ /** https://github.com/golang/vscode-go/blob/master/docs/debugging-legacy.md#debug-a-single-test-function-go-launch-test-function **/
   "configurations": {
-    "app": {
-      "adapter": "vscode-go",
+    "run": {
+      "adapter": "delve",
+      "filetypes": [
+        "go"
+      ],
+      "variables": {
+        "dlvFlags": "--check-go-version=false"
+      },
       "configuration": {
         "request": "launch",
-        "mode": "debug",
-        "dlvToolPath": "$HOME/go/bin/dlv",
-        "program": "${workspaceFolder}/cmd/web",
-        "cwd": "${workspaceFolder}"
+        "program": "${fileDirname}",
+        "mode": "debug"
+      }
+    },
+    "package": {
+      "adapter": "delve",
+      "filetypes": [
+        "go"
+      ],
+      "variables": {
+        "dlvFlags": "--check-go-version=false"
+      },
+      "configuration": {
+        "request": "launch",
+        "mode": "test",
+        "program": "${workspaceFolder}",
+        "env": {},
+        "args": []
       }
     },
     "file": {
-      "adapter": "vscode-go",
+      "adapter": "delve",
+      "filetypes": [
+        "go"
+      ],
+      "variables": {
+        "dlvFlags": "--check-go-version=false"
+      },
       "configuration": {
-        "name": "Test Current File",
-        "type": "go",
         "request": "launch",
         "mode": "test",
-        "dlvToolPath": "$HOME/go/bin/dlv",
         "program": "${file}",
-        "cwd": "${workspaceFolder}",
         "env": {},
-        "args": [],
-        "showLog": true
+        "args": []
       }
     },
     "method": {
-      "adapter": "vscode-go",
+      "adapter": "delve",
+      "filetypes": [
+        "go"
+      ],
+      "variables": {
+        "dlvFlags": "--check-go-version=false"
+      },
       "configuration": {
-        "name": "Test Method",
-        "type": "go",
         "request": "launch",
         "mode": "test",
-        "program": "${fileDirname}",
-        "cwd": "${workspaceFolder}",
-        "dlvToolPath": "$HOME/go/bin/dlv",
+        "program": "${workspaceFolder}",
         "env": {},
         "args": [
-          "-test.v",
           "-test.run",
           "${Test}"
-        ],
-        "showLog": true
+        ]
       }
     }
   }

@@ -1,17 +1,16 @@
 # If you come from bash you might have to change your $PATH.
-export PATH=$HOME/bin:/usr/local/bin:$PATH
+source "$HOME/.profile"
 
-# Path to your oh-my-zsh installation.
 export EDITOR="nvim"
-export ZSH="/Users/wlacruz/.oh-my-zsh"
+export PATH=$PATH:/usr/local/go/bin
+# Path to your oh-my-zsh installation.
+export ZSH="$HOME/.oh-my-zsh"
 export GOPATH="$HOME/go"
 export PATH="$GOPATH/bin:$PATH"
 export GOBIN="$GOPATH/bin"
 
 export PATH="/usr/local/opt/lua@5.3/bin:$PATH"
-export PATH="$HOME/Downloads/jdt-language-server-latest/runtime:$PATH"
 
-export JDTLS_HOME=/Users/wlacruz/Downloads/jdt-language-server-latest
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
@@ -80,7 +79,6 @@ plugins=(git npm yarn node cp docker)
 
 #plugins=(git npm yarn node aws cp docker kubectl zsh-autosuggestions zsh-syntax-highlighting)
 
-
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -109,23 +107,33 @@ export LANG=en_US.UTF-8
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias t="tmux"
-#alias ctags="`brew --prefix`/bin/ctags"
 alias td="nvim ~/dotfiles/notes.md"
 alias dot="cd ~/dotfiles; nvim"
 
 alias vim="/usr/local/bin/nvim"
 
-eval "$(zoxide init zsh)"
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="/home/wuilliam/.sdkman"
+[[ -s "/home/wuilliam/.sdkman/bin/sdkman-init.sh" ]] && source "/home/wuilliam/.sdkman/bin/sdkman-init.sh"
+[[ -s "/home/wuilliam/.gvm/scripts/gvm" ]] && source "/home/wuilliam/.gvm/scripts/gvm"
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
-
-autoload -U compinit
-compinit
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
 export GITHUB_LOGIN="wuilliam321"
 export GITHUB_TOKEN="$(cat ~/.github_token)"
+
+
+[[ -s "/home/wuilliam/.gvm/scripts/gvm" ]] && source "/home/wuilliam/.gvm/scripts/gvm"
+
+[[ -s "/home/wuilliam/.gvm/scripts/gvm" ]] && source "/home/wuilliam/.gvm/scripts/gvm"
+
+[[ -s "/home/wuilliam/.gvm/scripts/gvm" ]] && source "/home/wuilliam/.gvm/scripts/gvm"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -142,18 +150,11 @@ nn() {
   nvim "$file"
 }
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# Generated for envman. Do not edit.
+[ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
 
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="$HOME/.sdkman"
-[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
-export PATH=/Users/wlacruz/.sdkman/candidates/grails/current/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin
-#Added by furycli:
-export PATH=/Users/wlacruz/Library/Python//bin:/Users/wlacruz/.sdkman/candidates/grails/current/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin
-export PATH=/Users/wlacruz/Library/Python//bin:/Users/wlacruz/.sdkman/candidates/grails/current/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:/usr/local/go/bin
+autoload -U compinit
+compinit
 
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
-export ES_JAVA_HOME=
-export JAVA_HOME=
+eval "$(zoxide init zsh)"
+alias luamake="$HOME/Downloads/lua-language-server/3rd/luamake/luamake"

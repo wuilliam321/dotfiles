@@ -224,7 +224,7 @@ M.lsp_implementations = function()
 
       local bufnr = ctx.bufnr
       local ft = vim.api.nvim_buf_get_option(bufnr, 'filetype')
-      local new_result
+      local new_result = result
 
       -- In go code, I do not like to see any mocks for impls
       if ft == 'go' then

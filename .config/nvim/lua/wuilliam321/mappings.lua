@@ -12,7 +12,8 @@ nnoremap( '<leader>pp', function() require("wuilliam321.finders").git_files() en
 nnoremap( '<leader>pf', function() require("wuilliam321.finders").project_find() end )
 nnoremap( '<leader>pg', function() require("wuilliam321.finders").project_grep() end )
 nnoremap( '<leader>pb', function() require("wuilliam321.finders").buffers() end )
-nnoremap( '<leader>ff', function() require("wuilliam321.finders").file_browser() end )
+-- nnoremap( '<leader>ff', function() require("wuilliam321.finders").file_browser() end )
+nnoremap( '<leader>ff', ':Ex<cr>' )
 nnoremap( '<leader>ph', function() require("wuilliam321.finders").help_tags() end )
 nnoremap( '<leader>di', function() require("wuilliam321.finders").buffer_diagnostics() end )
 nnoremap( '<leader>fg', function() require("wuilliam321.finders").buffer_find() end )
@@ -43,7 +44,7 @@ nnoremap( '<leader>pd', '<cmd>PrettierAsync<cr>' )
 nnoremap( 'z=', function() require("telescope.builtin").spell_suggest(require("telescope.themes").get_dropdown({ previewer = false })) end )
 
 -- testing/debugging
-nnoremap( '<leader>da', '<cmd>call vimspector#LaunchWithSettings( #{ configuration: "app" } )<cr>' )
+nnoremap( '<leader>da', '<cmd>call vimspector#LaunchWithSettings( #{ configuration: "run" } )<cr>' )
 nnoremap( '<leader>df', '<cmd>call vimspector#LaunchWithSettings( #{ configuration: "file" } )<cr>' )
 -- uses tyru/current-func-info.vim
 nnoremap( '<leader>dm', '<cmd>call vimspector#LaunchWithSettings( #{ configuration: "method", Test: "^" . cfi#format("%s", "") . "$" } )<cr>' )

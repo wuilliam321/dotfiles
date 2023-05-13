@@ -3,7 +3,40 @@ local lspconfig = require('lspconfig')
 local language_servers = {
   'html',
   'cssls',
-  'vuels',
+  eslint = {
+    settings = {
+      packageManager = 'yarn',
+    },
+  },
+  vuels = {
+    settings = {
+      vetur = {
+        completion = {
+          autoImport = true,
+          useScaffoldSnippets = true
+        },
+        format = {
+          enable = true,
+          defaultFormatter = {
+            html = "prettier",
+            js = "prettier",
+            ts = "prettier",
+          }
+        },
+        validation = {
+          template = true,
+          script = true,
+          style = true,
+          templateProps = true,
+          interpolation = true
+        },
+        useWorkspaceDependencies = true,
+        -- experimental = {
+        --   templateInterpolationService = true
+        -- }
+      },
+    },
+  },
   'jsonls',
   'pylsp',
   'groovyls',
@@ -11,9 +44,9 @@ local language_servers = {
   'dockerls',
   'yamlls',
   'terraformls',
-  sqls = {
+  sqlls = {
       settings = {
-          sqls = {
+          sqlls = {
               connections = {
                   {
                       driver = 'postgresql',
