@@ -2,4 +2,9 @@
 --  I promise not to create any merge conflicts in this directory :)
 --
 -- See the kickstart.nvim README for more information
+
+function R(name)
+    require("plenary.reload").reload_module(name)
+end
+
 return {}
