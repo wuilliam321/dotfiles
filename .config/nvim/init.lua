@@ -64,10 +64,12 @@ vim.keymap.set('i', '<C-c>', '<esc>')
 vim.keymap.set('t', '<Esc>', '<C-\\><C-n>')
 vim.keymap.set('x', 'x', '<Esc>')
 
-vim.keymap.set({"n", "v"}, "<leader>y", [["+y]])
+vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]])
 vim.keymap.set("n", "<leader>Y", [["+Y]])
-vim.keymap.set("x", "<leader>p", [["_dP]])
-vim.keymap.set({"n", "v"}, "<leader>d", [["_d]])
+vim.keymap.set({ "n", "v" }, "<leader>p", [["+p]])
+
+vim.keymap.set("x", "<leader>P", [["_dP]])
+vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]])
 
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
@@ -158,13 +160,16 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
       vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
       vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
-      vim.keymap.set('n', '<leader>pg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
+      vim.keymap.set('n', '<leader>lg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
+      vim.keymap.set('n', '<leader>pg', function()
+        builtin.grep_string({ search = vim.fn.input('Grep for > ', '') })
+      end, { desc = '[S]earch by [G]rep' })
       vim.keymap.set('n', '<leader>di', builtin.diagnostics, { desc = 'Search [Di]agnostics' })
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
-      vim.keymap.set('n', '<C-h>', '<cmd>cprev<cr>zz')
-      vim.keymap.set('n', '<C-l>', '<cmd>cnext<cr>zz')
+      vim.keymap.set('n', '<C-n>', '<cmd>cnext<cr>zz')
+      vim.keymap.set('n', '<C-p>', '<cmd>cprev<cr>zz')
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
@@ -213,7 +218,7 @@ require('lazy').setup({
           map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
           map('gi', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
           map('go', require('telescope.builtin').lsp_type_definitions, '[G]oto Type Definiti[o]n')
-          map('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
+          map('<leader>dS', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
           map('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
           map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
           map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
@@ -242,7 +247,7 @@ require('lazy').setup({
 
       local servers = {
         gopls = {
-          cmd = { '/Users/wlacruz/.gvm/pkgsets/go1.22.1/global/bin/gopls' },
+          -- cmd = { '/Users/wlacruz/.gvm/pkgsets/go1.22.1/global/bin/gopls' },
           settings = {
             gopls = {
               -- codelenses = { gc_details = false },
@@ -260,7 +265,7 @@ require('lazy').setup({
           },
         },
         golangci_lint_ls = {
-          cmd = { '/Users/wlacruz/.gvm/pkgsets/go1.22.1/global/bin/golangci-lint' },
+          -- cmd = { '/Users/wlacruz/.gvm/pkgsets/go1.22.1/global/bin/golangci-lint' },
         },
         lua_ls = {
           -- cmd = {...},
@@ -437,6 +442,27 @@ require('lazy').setup({
   },
 
   {
+    'puremourning/vimspector',
+    event = 'VimEnter',
+    dependencies = { 'tyru/current-func-info.vim' },
+    config = function()
+      vim.keymap.set('n', '<leader>da', '<cmd>call vimspector#LaunchWithSettings( #{ configuration: "app" } )<cr>')
+      vim.keymap.set('n', '<leader>df', '<cmd>call vimspector#LaunchWithSettings( #{ configuration: "file" } )<cr>')
+      vim.keymap.set('n', '<leader>ds', '<cmd>VimspectorReset<cr>')
+      vim.keymap.set('n', '<leader>bp', '<cmd>call vimspector#ToggleBreakpoint()<cr>')
+      vim.keymap.set('n', '<leader>dn', '<cmd>call vimspector#StepOver()<cr>')
+      vim.keymap.set('n', '<leader>dc', '<cmd>call vimspector#Continue()<cr>')
+
+      -- uses tyru/current-func-info.vim
+      vim.keymap.set(
+        'n',
+        '<leader>dm',
+        '<cmd>call vimspector#LaunchWithSettings( #{ configuration: "method", Test: "^" . cfi#format("%s", "") . "$" } )<cr>'
+      )
+    end,
+  },
+
+  {
     -- Colorscheme
     'folke/tokyonight.nvim',
     lazy = false,    -- make sure we load this during startup if it is your main colorscheme
@@ -466,6 +492,7 @@ require('lazy').setup({
             Search = { bg = colors.sapphire, fg = colors.surface0 },
           }
         end,
+        transparent_background = false,
         integrations = {
           cmp = true,
           gitsigns = true,
@@ -697,26 +724,6 @@ require('lazy').setup({
     end,
   },
 
-  {
-    'puremourning/vimspector',
-    dependencies = { 'tyru/current-func-info.vim' },
-    config = function()
-      vim.keymap.set('n', '<leader>da', '<cmd>call vimspector#LaunchWithSettings( #{ configuration: "app" } )<cr>')
-      vim.keymap.set('n', '<leader>df', '<cmd>call vimspector#LaunchWithSettings( #{ configuration: "file" } )<cr>')
-      vim.keymap.set('n', '<leader>ds', '<cmd>VimspectorReset<cr>')
-      vim.keymap.set('n', '<leader>bp', '<cmd>call vimspector#ToggleBreakpoint()<cr>')
-      vim.keymap.set('n', '<leader>dn', '<cmd>call vimspector#StepOver()<cr>')
-      vim.keymap.set('n', '<leader>dc', '<cmd>call vimspector#Continue()<cr>')
-
-      -- uses tyru/current-func-info.vim
-      vim.keymap.set(
-        'n',
-        '<leader>dm',
-        '<cmd>call vimspector#LaunchWithSettings( #{ configuration: "method", Test: "^" . cfi#format("%s", "") . "$" } )<cr>'
-      )
-    end,
-  },
-
   -- {
   --   'airblade/vim-gitgutter',
   --   config = function()
@@ -809,6 +816,39 @@ require('lazy').setup({
     config = function()
       vim.g.copilot_filetypes = { VimspectorPrompt = false }
     end,
+  },
+  {
+    '/Users/wlacruz/personal/nvim-autorun',
+    dir = '~/personal/nvim-autorun',
+    config = function()
+      vim.defer_fn(function()
+        local w = math.floor(vim.api.nvim_win_get_width(0) / 3)
+        --- @diagnostic disable-next-line: redundant-parameter
+        require('autorun').setup({
+          show_returns = true,
+          go_tests = true,
+          window = {
+            relative = 'editor',
+            height = vim.api.nvim_win_get_height(0) - 2,
+            width = w + 12,
+            top = 0,
+            left = (w + 12) * 2,
+            style = 'minimal',
+            border = 'double',
+            transparent = 10,
+          }
+        })
+      end, 2000)
+    end
+  },
+  {
+    '/Users/wlacruz/personal/nvim-iso8583',
+    dir = '~/personal/nvim-iso8583',
+    config = function()
+      require('iso8583').setup({
+        cmd = "/Users/wlacruz/work/parser/bin/iso8583",
+      })
+    end
   },
 
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
