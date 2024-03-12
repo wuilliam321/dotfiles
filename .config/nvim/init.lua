@@ -137,13 +137,37 @@ require('lazy').setup({
       { 'nvim-tree/nvim-web-devicons',            enabled = vim.g.have_nerd_font },
     },
     config = function()
+      require('telescope').setup {
+        defaults = {
+          path_display = { "shorten" },
+        },
+        pickers = {
+          find_files = { theme = "ivy" },
+          lsp_definitions = { theme = "ivy" },
+          lsp_references = { theme = "ivy" },
+          lsp_implementations = { theme = "ivy" },
+          lsp_type_definitions = { theme = "ivy" },
+          lsp_document_symbols = { theme = "ivy" },
+          lsp_dynamic_workspace_symbols = { theme = "ivy" },
+          git_files = { theme = "ivy" },
+          help_tags = { theme = "ivy" },
+          keymaps = { theme = "ivy" },
+          builtin = { theme = "ivy" },
+          grep_string = { theme = "ivy" },
+          live_grep = { theme = "ivy" },
+          diagnostics = { theme = "ivy" },
+          resume = { theme = "ivy" },
+          oldfiles = { theme = "ivy" },
+          buffers = { theme = "ivy" },
+        },
+      }
       -- Two important keymaps to use while in telescope are:
       --  - Insert mode: <c-/>
       --  - Normal mode: ?
       require('telescope').setup {
         extensions = {
           ['ui-select'] = {
-            require('telescope.themes').get_dropdown(),
+            require('telescope.themes').get_dropdown({ winblend = 10 }),
           },
         },
       }
@@ -724,15 +748,16 @@ require('lazy').setup({
     end,
   },
 
-  -- {
-  --   'airblade/vim-gitgutter',
-  --   config = function()
-  --     vim.keymap.set('n', '<leader>ghp', '@<Plug>(GitGutterPreviewHunk)')
-  --     vim.keymap.set('n', '<leader>ghu', '@<Plug>(GitGutterUndoHunk)')
-  --     vim.keymap.set('n', '<leader>ghs', '@<Plug>(GitGutterStageHunk)')
-  --     vim.keymap.set('x', '<leader>ghs', '@<Plug>(GitGutterStageHunk)')
-  --   end,
-  -- },
+  {
+    'airblade/vim-gitgutter',
+    config = function()
+      vim.keymap.set('n', '<leader>ghp', '@<Plug>(GitGutterPreviewHunk)')
+      vim.keymap.set('n', '<leader>ghu', '@<Plug>(GitGutterUndoHunk)')
+      vim.keymap.set('n', '<leader>ghs', '@<Plug>(GitGutterStageHunk)')
+      vim.keymap.set('x', '<leader>ghs', '@<Plug>(GitGutterStageHunk)')
+      vim.cmd([[GitGutterSignsDisable]])
+    end,
+  },
 
   -- 'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
   'tpope/vim-surround',
@@ -822,17 +847,18 @@ require('lazy').setup({
     dir = '~/personal/nvim-autorun',
     config = function()
       vim.defer_fn(function()
-        local w = math.floor(vim.api.nvim_win_get_width(0) / 3)
+        local w = math.floor(vim.api.nvim_win_get_width(0))
+        local h = math.floor(vim.api.nvim_win_get_height(0) / 4)
         --- @diagnostic disable-next-line: redundant-parameter
         require('autorun').setup({
           show_returns = true,
           go_tests = true,
           window = {
             relative = 'editor',
-            height = vim.api.nvim_win_get_height(0) - 2,
-            width = w + 12,
-            top = 0,
-            left = (w + 12) * 2,
+            height = h,
+            width = w,
+            top = h * 3,
+            left = 0,
             style = 'minimal',
             border = 'double',
             transparent = 10,
