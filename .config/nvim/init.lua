@@ -848,7 +848,7 @@ require('lazy').setup({
   },
   {
     'wuilliam321/nvim-autorun',
-    dir = '~/personal/nvim-autorun',
+    -- dir = '~/personal/nvim-autorun',
     config = function()
       vim.defer_fn(function()
         local w = math.floor(vim.api.nvim_win_get_width(0))
@@ -856,7 +856,7 @@ require('lazy').setup({
         --- @diagnostic disable-next-line: redundant-parameter
         require('autorun').setup({
           show_returns = true,
-          go_tests = true,
+          run_on_save = false,
           window = {
             relative = 'editor',
             height = h,
@@ -868,6 +868,8 @@ require('lazy').setup({
             transparent = 10,
           }
         })
+       vim.keymap.set('n', '<leader>ta', ':GoTestAll<cr>')
+       vim.keymap.set('n', '<leader>tm', ':GoTestMethod<cr>')
       end, 2000)
     end
   },
