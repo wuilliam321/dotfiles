@@ -194,6 +194,8 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
       vim.keymap.set('n', '<C-n>', '<cmd>cnext<cr>zz')
       vim.keymap.set('n', '<C-p>', '<cmd>cprev<cr>zz')
+      vim.keymap.set('n', 'n', 'nzz')
+      vim.keymap.set('n', 'b', 'bzz')
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
