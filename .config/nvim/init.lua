@@ -139,7 +139,7 @@ require('lazy').setup({
     config = function()
       require('telescope').setup {
         defaults = {
-          path_display = { "shorten" },
+          path_display = { "smart" },
         },
         pickers = {
           find_files = { theme = "ivy" },
