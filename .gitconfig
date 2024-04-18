@@ -1,22 +1,35 @@
 [user]
-	email = wuilliam.lacruz@mercadolibre.com
+	email = wuilliam321@gmail.com
 	name = Wuilliam Lacruz
+
 [personal]
 	email = wuilliam321@gmail.com
 	name = Wuilliam Lacruz
+
 ; [diff]
 ; 	tool = meld
+
 [url "git@github.com:"]
 	insteadOf = https://github.com/
+
 [url "git@github.com"]
 	insteadOf = https://github.com
+
 [url "git@github.com-personal"]
-	insteadOf = https://github.com
+	insteadOf = https://github.com/
+	insteadOf = git@github.com/
+
 ; [alias]
 ;   cleanup = "!git branch --merged | grep  -v '\\*\\|master\\|staging' | xargs -n 1 git branch -d"
+
 [core]
 	editor = nvim
+
 [url "https://"]
 	insteadOf = git://
+
 [init]
 	defaultBranch = master
+
+[rerere]
+	enabled = true
