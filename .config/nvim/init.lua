@@ -274,7 +274,7 @@ require('lazy').setup({
       local servers = {
         jsonls = {},
         gopls = {
-          -- cmd = { '/Users/wlacruz/.gvm/pkgsets/go1.22.1/global/bin/gopls' },
+          cmd = { '/Users/wlacruz/go/bin/gopls' },
           settings = {
             gopls = {
               -- codelenses = { gc_details = false },
@@ -292,7 +292,7 @@ require('lazy').setup({
           },
         },
         golangci_lint_ls = {
-          -- cmd = { '/Users/wlacruz/.gvm/pkgsets/go1.22.1/global/bin/golangci-lint' },
+          cmd = { '/Users/wlacruz/go/bin/golangci-lint' },
         },
         lua_ls = {
           -- cmd = {...},
@@ -570,7 +570,6 @@ require('lazy').setup({
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     config = function()
-        --- @diagnostic disable-next-line: missing-fields
       require('nvim-treesitter.configs').setup {
         ensure_installed = { 'bash', 'json', 'lua', 'markdown', 'vim', 'vimdoc', 'go', 'sql' },
         -- Autoinstall languages that are not installed
@@ -809,7 +808,7 @@ require('lazy').setup({
   },
   {
     'wuilliam321/nvim-autorun',
-    -- dir = '~/personal/nvim-autorun',
+    dir = '~/personal/nvim-autorun',
     config = function()
       vim.defer_fn(function()
         local w = math.floor(vim.api.nvim_win_get_width(0))
