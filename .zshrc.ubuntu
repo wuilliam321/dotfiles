@@ -21,6 +21,8 @@ alias td="nvim ~/dotfiles/notes.md"
 alias dot="cd ~/dotfiles; nvim"
 alias vim="/usr/local/bin/nvim"
 alias etf="clippaste > output.json && ~/personal/etf-crawl/etf-crawler calc | clipcopy"
+alias pa="~/Downloads/Postman\ Agent/Postman\ Agent &"
+alias generate="/home/wuilliam/personal/ai-promt-code-gen/generate_output.sh"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -51,3 +53,5 @@ DISTRO=linux-x64
 export PATH=$HOME/.local/bin/node-$VERSION-$DISTRO/bin:$PATH
 
 [[ -s "/home/wuilliam/.gvm/scripts/gvm" ]] && source "/home/wuilliam/.gvm/scripts/gvm"
+export PATH="$PATH:/home/wuilliam/personal/ai-code-snap"
+export PATH="$PATH:/home/wuilliam"
