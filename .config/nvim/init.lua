@@ -252,6 +252,10 @@ require('lazy').setup({
           map('K', vim.lsp.buf.hover, 'Hover Documentation')
           map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
 
+          map('<leader>oi', function()
+            vim.lsp.buf.code_action({ context = { only = { "source.organizeImports" } }, apply = true })
+          end, '[O]rganize [I]mports')
+
           local client = vim.lsp.get_client_by_id(event.data.client_id)
           if client and client.server_capabilities.documentHighlightProvider then
             vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
@@ -571,7 +575,7 @@ require('lazy').setup({
     build = ':TSUpdate',
     config = function()
       require('nvim-treesitter.configs').setup {
-        ensure_installed = { 'bash', 'json', 'lua', 'markdown', 'vim', 'vimdoc', 'go', 'sql' },
+        ensure_installed = { 'bash', 'json', 'lua', 'markdown', 'vim', 'vimdoc', 'go', 'sql', 'c' },
         -- Autoinstall languages that are not installed
         auto_install = true,
         highlight = { enable = true },
@@ -733,7 +737,13 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>gs', vim.cmd.G)
     end,
   },
-  'mechatroner/rainbow_csv',
+  {
+    'mechatroner/rainbow_csv',
+    config = function()
+      vim.g.rcsv_delimiters = { "\t", ",", ";", "|" }
+    end
+  },
+
 
   {
     'mbbill/undotree',
@@ -828,21 +838,21 @@ require('lazy').setup({
             transparent = 10,
           }
         })
-       vim.keymap.set('n', '<leader>ta', ':GoTestAll<cr>')
-       vim.keymap.set('n', '<leader>tm', ':GoTestMethod<cr>')
-       vim.keymap.set('n', '<leader>td', ':GoTestDiag<cr>')
+        vim.keymap.set('n', '<leader>ta', ':GoTestAll<cr>')
+        vim.keymap.set('n', '<leader>tm', ':GoTestMethod<cr>')
+        vim.keymap.set('n', '<leader>td', ':GoTestDiag<cr>')
       end, 2000)
     end
   },
-  {
-    '/Users/wlacruz/personal/nvim-iso8583',
-    dir = '~/personal/nvim-iso8583',
-    config = function()
-      require('iso8583').setup({
-        cmd = "/Users/wlacruz/work/parser/bin/iso8583",
-      })
-    end
-  },
+  -- {
+  --   '/Users/wlacruz/personal/nvim-iso8583',
+  --   dir = '~/personal/nvim-iso8583',
+  --   config = function()
+  --     require('iso8583').setup({
+  --       cmd = "/Users/wlacruz/work/parser/bin/iso8583",
+  --     })
+  --   end
+  -- },
 
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
