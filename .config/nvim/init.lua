@@ -494,6 +494,63 @@ require('lazy').setup({
   },
 
   {
+    "nvim-neotest/neotest",
+    dependencies = {
+      "nvim-neotest/nvim-nio",
+      "nvim-lua/plenary.nvim",
+      "antoinemadec/FixCursorHold.nvim",
+      "nvim-treesitter/nvim-treesitter",
+      "nvim-neotest/neotest-go",
+    },
+    config = function()
+      -- get neotest namespace (api call creates or returns namespace)
+      local neotest_ns = vim.api.nvim_create_namespace("neotest")
+      vim.diagnostic.config({
+        virtual_text = {
+          format = function(diagnostic)
+            local message =
+                diagnostic.message:gsub("\n", " "):gsub("\t", " "):gsub("%s+", " "):gsub("^%s+", "")
+            return message
+          end,
+        },
+      }, neotest_ns)
+      local nt = require("neotest")
+      nt.setup({
+        -- your neotest config here
+        adapters = {
+          require("neotest-go")({
+            experimental = {
+              test_table = true,
+            },
+            -- args = { "-count=1", "-timeout=60s" }
+          }),
+        },
+      })
+
+      vim.keymap.set('n', '<leader>ta', function()
+        nt.run.run({ path = vim.fn.getcwd(), extra_args = { "-short" } })
+        nt.summary.open()
+      end)
+      vim.keymap.set('n', '<leader>tm', function()
+        nt.run.run()
+        nt.summary.open()
+      end)
+      vim.keymap.set('n', '<leader>tf', function()
+        nt.run.run(vim.fn.expand("%"))
+        -- nt.run.run({ vim.fn.expand("%"), extra_args = { "-short" } })
+        nt.summary.open()
+      end)
+      vim.keymap.set('n', '<leader>ts', function()
+        nt.run.stop()
+        nt.summary.close()
+      end)
+
+      vim.keymap.set('n', '[n', function() nt.jump.prev({ status = "failed" }) end)
+      vim.keymap.set('n', ']n', function() nt.jump.next({ status = "failed" }) end)
+    end,
+  },
+
+  {
     -- Colorscheme
     'folke/tokyonight.nvim',
     lazy = false,    -- make sure we load this during startup if it is your main colorscheme
@@ -707,12 +764,6 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>te', function()
         term.gotoTerminal(2)
       end)
-      vim.keymap.set('n', '<leader>to', function()
-        term.gotoTerminal(3)
-      end)
-      vim.keymap.set('n', '<leader>ta', function()
-        term.gotoTerminal(4)
-      end)
     end,
   },
 
@@ -838,9 +889,9 @@ require('lazy').setup({
             transparent = 10,
           }
         })
-        vim.keymap.set('n', '<leader>ta', ':GoTestAll<cr>')
-        vim.keymap.set('n', '<leader>tm', ':GoTestMethod<cr>')
-        vim.keymap.set('n', '<leader>td', ':GoTestDiag<cr>')
+        -- vim.keymap.set('n', '<leader>ta', ':GoTestAll<cr>')
+        -- vim.keymap.set('n', '<leader>tm', ':GoTestMethod<cr>')
+        -- vim.keymap.set('n', '<leader>td', ':GoTestDiag<cr>')
       end, 2000)
     end
   },
