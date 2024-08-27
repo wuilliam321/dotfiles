@@ -504,7 +504,9 @@ require('lazy').setup({
       "nvim-lua/plenary.nvim",
       "antoinemadec/FixCursorHold.nvim",
       "nvim-treesitter/nvim-treesitter",
+
       "nvim-neotest/neotest-go",
+      'nvim-neotest/neotest-jest',
     },
     config = function()
       -- get neotest namespace (api call creates or returns namespace)
@@ -527,6 +529,14 @@ require('lazy').setup({
               test_table = true,
             },
             -- args = { "-count=1", "-timeout=60s" }
+          }),
+          require('neotest-jest')({
+            jestCommand = "npm test --",
+            jestConfigFile = "jest.config.js",
+            env = { CI = true },
+            cwd = function(path)
+              return vim.fn.getcwd()
+            end,
           }),
         },
       })
