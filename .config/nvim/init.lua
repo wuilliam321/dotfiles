@@ -719,65 +719,24 @@ require('lazy').setup({
 
   {
     'ThePrimeagen/harpoon',
+    branch = "harpoon2",
+    dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
-      local harpoon = require 'harpoon'
-      local ui = require 'harpoon.ui'
-      local mark = require 'harpoon.mark'
-      local term = require 'harpoon.term'
+      local harpoon = require("harpoon")
 
-      harpoon.setup {
-        projects = {
-          ['~/onboarding/fury_rampup-wuilliam-lacruz'] = {
-            term = {
-              cmds = {
-                'go test ./...\n',
-                'fury run 21001\n',
-              },
-            },
-          },
-          ['~/work/fury_bari-transaction-channel'] = {
-            term = {
-              cmds = {
-                'make test\n',
-                'make run\n',
-              },
-            },
-          },
-          ['~/work/fury_bari-transactor'] = {
-            term = {
-              cmds = {
-                'make test\n',
-                'make run\n',
-              },
-            },
-          },
-        },
-      }
+      harpoon:setup()
 
-      vim.keymap.set('n', '<leader>mb', function()
-        mark.add_file()
-      end)
-      vim.keymap.set('n', '<leader>mu', function()
-        ui.nav_file(1)
-      end)
-      vim.keymap.set('n', '<leader>me', function()
-        ui.nav_file(2)
-      end)
-      vim.keymap.set('n', '<leader>mo', function()
-        ui.nav_file(3)
-      end)
-      vim.keymap.set('n', '<leader>ma', function()
-        ui.nav_file(4)
-      end)
-      vim.keymap.set('n', '<leader>mm', function()
-        ui.toggle_quick_menu()
-      end)
-      vim.keymap.set('n', '<leader>tu', function()
-        term.gotoTerminal(1)
-      end)
-      vim.keymap.set('n', '<leader>te', function()
-        term.gotoTerminal(2)
-      end)
+      vim.keymap.set("n", "<leader>mb", function() harpoon:list():add() end)
+      vim.keymap.set("n", "<leader>mm", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
+
+      vim.keymap.set("n", "<leader>mu", function() harpoon:list():select(1) end)
+      vim.keymap.set("n", "<leader>me", function() harpoon:list():select(2) end)
+      vim.keymap.set("n", "<leader>mo", function() harpoon:list():select(3) end)
+      vim.keymap.set("n", "<leader>ma", function() harpoon:list():select(4) end)
+
+      -- Toggle previous & next buffers stored within Harpoon list
+      -- vim.keymap.set("n", "<C-S-H>", function() harpoon:list():prev() end)
+      -- vim.keymap.set("n", "<C-S-L>", function() harpoon:list():next() end)
     end,
   },
 
