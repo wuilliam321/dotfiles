@@ -234,6 +234,32 @@ require('lazy').setup({
       { 'j-hui/fidget.nvim', opts = {} },
     },
     config = function()
+      local border = {
+        { '┌', 'FloatBorder' },
+        { '─', 'FloatBorder' },
+        { '┐', 'FloatBorder' },
+        { '│', 'FloatBorder' },
+        { '┘', 'FloatBorder' },
+        { '─', 'FloatBorder' },
+        { '└', 'FloatBorder' },
+        { '│', 'FloatBorder' },
+      }
+
+      -- LSP settings (for overriding per client)
+      local handlers = {
+        ["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = border }),
+        ["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = border }),
+      }
+
+      -- To instead override globally
+      local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
+      ---@diagnostic disable-next-line: duplicate-set-field
+      function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
+        opts = opts or {}
+        opts.border = opts.border or border
+        return orig_util_open_floating_preview(contents, syntax, opts, ...)
+      end
+
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
         callback = function(event)
@@ -472,6 +498,10 @@ require('lazy').setup({
             return vim_item
           end,
         },
+        window = {
+          completion = cmp.config.window.bordered(),
+          documentation = cmp.config.window.bordered(),
+        },
       }
     end,
   },
@@ -520,14 +550,16 @@ require('lazy').setup({
           end,
         },
       }, neotest_ns)
+
       local nt = require("neotest")
+
       nt.setup({
-        -- your neotest config here
         adapters = {
           require("neotest-go")({
             experimental = {
               test_table = true,
             },
+            -- args = { "-short" }
             -- args = { "-count=1", "-timeout=60s" }
           }),
           require('neotest-jest')({
@@ -542,7 +574,7 @@ require('lazy').setup({
       })
 
       vim.keymap.set('n', '<leader>ta', function()
-        nt.run.run({ path = vim.fn.getcwd(), extra_args = { "-short" } })
+        nt.run.run({ path = vim.fn.getcwd() })
         nt.summary.open()
       end)
       vim.keymap.set('n', '<leader>tm', function()
@@ -628,7 +660,15 @@ require('lazy').setup({
       vim.cmd.colorscheme 'catppuccin'
     end,
   },
-
+  {
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    config = function()
+      require('lualine').setup({
+        extensions = { 'quickfix', 'fugitive' }
+      })
+    end
+  },
   -- Highlight todo, notes, etc in comments
   {
     'folke/todo-comments.nvim',
@@ -645,8 +685,9 @@ require('lazy').setup({
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     config = function()
+      ---@diagnostic disable-next-line: missing-fields
       require('nvim-treesitter.configs').setup {
-        ensure_installed = { 'bash', 'json', 'lua', 'markdown', 'vim', 'vimdoc', 'go', 'sql', 'jsdoc', 'c' },
+        ensure_installed = { 'bash', 'json', 'lua', 'markdown', 'vim', 'vimdoc', 'go', 'sql', 'jsdoc', 'c', 'http' },
         -- Autoinstall languages that are not installed
         auto_install = true,
         highlight = { enable = true },
@@ -767,8 +808,15 @@ require('lazy').setup({
       vim.g.rcsv_delimiters = { "\t", ",", ";", "|" }
     end
   },
-
-
+  {
+    "rest-nvim/rest.nvim",
+    config = function()
+      ---@type rest.Opts
+      vim.g.rest_nvim = {
+        -- ...
+      }
+    end
+  },
   {
     'mbbill/undotree',
     config = function()
@@ -838,6 +886,41 @@ require('lazy').setup({
     'github/copilot.vim',
     config = function()
       vim.g.copilot_filetypes = { VimspectorPrompt = false }
+    end,
+  },
+  {
+    "robitx/gp.nvim",
+    config = function()
+      local conf = {
+        providers = {
+          ollama = {
+            disable = false,
+            endpoint = "http://localhost:11434/v1/chat/completions",
+            secret = "dummy_secret",
+          },
+
+        },
+        agents = {
+          {
+            provider = "ollama",
+            name = "ChatOllamaLlama3.1-8B",
+            chat = true,
+            command = false,
+            -- string with model name or table with model name and parameters
+            model = {
+              model = "llama3.1",
+              temperature = 0.2,
+              top_p = 1,
+              min_p = 0.05,
+            },
+            -- system prompt (use this to specify the persona/role of the AI)
+            system_prompt = "You are a golang AI assistant.",
+          },
+        }
+      }
+      require("gp").setup(conf)
+
+      -- Setup shortcuts here (see Usage > Shortcuts in the Documentation/Readme)
     end,
   },
   {
