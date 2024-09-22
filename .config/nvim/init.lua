@@ -102,22 +102,27 @@ require('lazy').setup({
     },
   },
 
-  -- { -- Useful plugin to show you pending keybinds.
-  --   'folke/which-key.nvim',
-  --   event = 'VimEnter', -- Sets the loading event to 'VimEnter'
-  --   config = function() -- This is the function that runs, AFTER loading
-  --     require('which-key').setup()
-  --
-  --     -- Document existing key chains
-  --     require('which-key').register {
-  --       ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
-  --       ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
-  --       ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
-  --       ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
-  --       ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
-  --     }
-  --   end,
-  -- },
+  {                     -- Useful plugin to show you pending keybinds.
+    'folke/which-key.nvim',
+    event = 'VimEnter', -- Sets the loading event to 'VimEnter'
+    config = function() -- This is the function that runs, AFTER loading
+      require('which-key').setup()
+
+      -- Document existing key chains
+      require('which-key').register {
+        { "<leader>c",  group = "[C]ode" },
+        { "<leader>c_", hidden = true },
+        { "<leader>d",  group = "[D]ocument" },
+        { "<leader>d_", hidden = true },
+        { "<leader>r",  group = "[R]ename" },
+        { "<leader>r_", hidden = true },
+        { "<leader>s",  group = "[S]earch" },
+        { "<leader>s_", hidden = true },
+        { "<leader>w",  group = "[W]orkspace" },
+        { "<leader>w_", hidden = true },
+      }
+    end,
+  },
 
   {
     'nvim-telescope/telescope.nvim',
@@ -176,7 +181,7 @@ require('lazy').setup({
       pcall(require('telescope').load_extension, 'ui-select')
 
       local builtin = require 'telescope.builtin'
-      vim.keymap.set('n', '<leader>ff', vim.cmd.Ex)
+      vim.keymap.set('n', '<leader>ff', vim.cmd.Ex, { desc = '[F]ind [F]iles' })
       vim.keymap.set('n', '<leader>pf', function()
         builtin.find_files { hidden = true }
       end, { desc = '[P]roject [F]iles' })
@@ -308,7 +313,7 @@ require('lazy').setup({
         jsonls = {},
         pylsp = {},
         gopls = {
-          cmd = { '/Users/wlacruz/go/bin/gopls' },
+          -- cmd = { '/Users/wlacruz/go/bin/gopls' },
           settings = {
             gopls = {
               -- codelenses = { gc_details = false },
@@ -326,7 +331,7 @@ require('lazy').setup({
           },
         },
         golangci_lint_ls = {
-          cmd = { '/Users/wlacruz/go/bin/golangci-lint' },
+          -- cmd = { '/Users/wlacruz/go/bin/golangci-lint' },
         },
         lua_ls = {
           -- cmd = {...},
@@ -514,18 +519,19 @@ require('lazy').setup({
     event = 'VimEnter',
     dependencies = { 'tyru/current-func-info.vim' },
     config = function()
-      vim.keymap.set('n', '<leader>da', '<cmd>call vimspector#LaunchWithSettings( #{ configuration: "app" } )<cr>')
-      vim.keymap.set('n', '<leader>df', '<cmd>call vimspector#LaunchWithSettings( #{ configuration: "file" } )<cr>')
-      vim.keymap.set('n', '<leader>ds', '<cmd>VimspectorReset<cr>')
-      vim.keymap.set('n', '<leader>bp', '<cmd>call vimspector#ToggleBreakpoint()<cr>')
-      vim.keymap.set('n', '<leader>dn', '<cmd>call vimspector#StepOver()<cr>')
-      vim.keymap.set('n', '<leader>dc', '<cmd>call vimspector#Continue()<cr>')
+      vim.keymap.set('n', '<leader>da', '<cmd>call vimspector#LaunchWithSettings( #{ configuration: "app" } )<cr>', { desc = '[D]ebug [A]ll' })
+      vim.keymap.set('n', '<leader>df', '<cmd>call vimspector#LaunchWithSettings( #{ configuration: "file" } )<cr>', { desc = '[D]ebug [F]ile' })
+      vim.keymap.set('n', '<leader>ds', '<cmd>VimspectorReset<cr>', { desc = '[D]ebug [S]top' })
+      vim.keymap.set('n', '<leader>bp', '<cmd>call vimspector#ToggleBreakpoint()<cr>', { desc = '[B]reak [P]oint' })
+      vim.keymap.set('n', '<leader>dn', '<cmd>call vimspector#StepOver()<cr>', { desc = '[D]ebug [N]ext' })
+      vim.keymap.set('n', '<leader>dc', '<cmd>call vimspector#Continue()<cr>', { desc = '[D]ebug [C]ontinue' })
 
       -- uses tyru/current-func-info.vim
       vim.keymap.set(
         'n',
         '<leader>dm',
-        '<cmd>call vimspector#LaunchWithSettings( #{ configuration: "method", Test: "^" . cfi#format("%s", "") . "$" } )<cr>'
+        '<cmd>call vimspector#LaunchWithSettings( #{ configuration: "method", Test: "^" . cfi#format("%s", "") . "$" } )<cr>',
+        { desc = '[D]ebug [M]ethod' }
       )
     end,
   },
@@ -579,20 +585,20 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>ta', function()
         nt.run.run({ path = vim.fn.getcwd() })
         nt.summary.open()
-      end)
+      end, { desc = '[T]est [A]ll' })
       vim.keymap.set('n', '<leader>tm', function()
         nt.run.run()
         nt.summary.open()
-      end)
+      end, { desc = '[T]est [M]ethod' })
       vim.keymap.set('n', '<leader>tf', function()
         nt.run.run(vim.fn.expand("%"))
         -- nt.run.run({ vim.fn.expand("%"), extra_args = { "-short" } })
         nt.summary.open()
-      end)
+      end, { desc = '[T]est [F]ile' })
       vim.keymap.set('n', '<leader>ts', function()
         nt.run.stop()
         nt.summary.close()
-      end)
+      end, { desc = '[T]est [S]top' })
 
       vim.keymap.set('n', '[n', function() nt.jump.prev({ status = "failed" }) end)
       vim.keymap.set('n', ']n', function() nt.jump.next({ status = "failed" }) end)
@@ -782,13 +788,13 @@ require('lazy').setup({
 
       harpoon:setup()
 
-      vim.keymap.set("n", "<leader>mb", function() harpoon:list():add() end)
-      vim.keymap.set("n", "<leader>mm", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
+      vim.keymap.set("n", "<leader>mb", function() harpoon:list():add() end, { desc = '[M]ark [B]uffer' })
+      vim.keymap.set("n", "<leader>mm", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, { desc = '[M]arks [M]enu' })
 
-      vim.keymap.set("n", "<leader>mu", function() harpoon:list():select(1) end)
-      vim.keymap.set("n", "<leader>me", function() harpoon:list():select(2) end)
-      vim.keymap.set("n", "<leader>mo", function() harpoon:list():select(3) end)
-      vim.keymap.set("n", "<leader>ma", function() harpoon:list():select(4) end)
+      vim.keymap.set("n", "<leader>mu", function() harpoon:list():select(1) end, { desc = 'Go [M]ark [U]' })
+      vim.keymap.set("n", "<leader>me", function() harpoon:list():select(2) end, { desc = 'Go [M]ark [E]' })
+      vim.keymap.set("n", "<leader>mo", function() harpoon:list():select(3) end, { desc = 'Go [M]ark [O]' })
+      vim.keymap.set("n", "<leader>ma", function() harpoon:list():select(4) end, { desc = 'Go [M]ark [A]' })
 
       -- Toggle previous & next buffers stored within Harpoon list
       -- vim.keymap.set("n", "<C-S-H>", function() harpoon:list():prev() end)
@@ -814,7 +820,7 @@ require('lazy').setup({
   {
     'tpope/vim-fugitive',
     config = function()
-      vim.keymap.set('n', '<leader>gs', vim.cmd.G)
+      vim.keymap.set('n', '<leader>gs', vim.cmd.G, { desc = '[G]it [S]tatus' })
     end,
   },
   {
@@ -841,7 +847,7 @@ require('lazy').setup({
       vim.opt.undodir = os.getenv 'HOME' .. '/.vim/undodir'
       vim.opt.undofile = true
 
-      vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle)
+      vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle, { desc = 'Toggle [U]ndotree' })
     end,
   },
 
