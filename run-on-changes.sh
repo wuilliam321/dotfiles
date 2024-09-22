@@ -16,6 +16,6 @@ do
     touch $LOCKFILE
     clear
     echo "$COMMAND"
-    ($COMMAND; rm $LOCKFILE) &
+    ($COMMAND; rm $LOCKFILE; echo "done.") &
   fi
 done

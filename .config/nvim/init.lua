@@ -239,6 +239,29 @@ require('lazy').setup({
       { 'j-hui/fidget.nvim', opts = {} },
     },
     config = function()
+        vim.api.nvim_create_autocmd("BufWritePre", {
+          pattern = "*.go",
+          callback = function()
+            local params = vim.lsp.util.make_range_params()
+            params.context = { only = { "source.organizeImports" } }
+            -- buf_request_sync defaults to a 1000ms timeout. Depending on your
+            -- machine and codebase, you may want longer. Add an additional
+            -- argument after params if you find that you have to write the file
+            -- twice for changes to be saved.
+            -- E.g., vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, 3000)
+            local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params)
+            for cid, res in pairs(result or {}) do
+              for _, r in pairs(res.result or {}) do
+                if r.edit then
+                  local enc = (vim.lsp.get_client_by_id(cid) or {}).offset_encoding or "utf-16"
+                  vim.lsp.util.apply_workspace_edit(r.edit, enc)
+                end
+              end
+            end
+            vim.lsp.buf.format({ async = false })
+          end
+        })
+
       local border = {
         { '┌', 'FloatBorder' },
         { '─', 'FloatBorder' },
@@ -248,12 +271,6 @@ require('lazy').setup({
         { '─', 'FloatBorder' },
         { '└', 'FloatBorder' },
         { '│', 'FloatBorder' },
-      }
-
-      -- LSP settings (for overriding per client)
-      local handlers = {
-        ["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = border }),
-        ["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = border }),
       }
 
       -- To instead override globally
@@ -307,15 +324,34 @@ require('lazy').setup({
       --- @diagnostic disable-next-line: cast-local-type
       capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
 
+
+      -- LSP settings (for overriding per client)
+      -- local handlers = {
+      --   ["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = border }),
+      --   ["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = border }),
+      -- }
+
       local servers = {
-        tsserver = {},
+        ts_ls = {},
         eslint = {},
         jsonls = {},
         pylsp = {},
         gopls = {
-          -- cmd = { '/Users/wlacruz/go/bin/gopls' },
+          -- handlers = handlers,
+          cmd = { '/Users/wlacruz/go/bin/gopls' },
           settings = {
             gopls = {
+              ["formatting.local"] = (function()
+                -- organize imports in groups
+                if vim.fn.executable("go") ~= 1 then
+                  return
+                end
+                local module = vim.fn.trim(vim.fn.system("go list -m"))
+                if vim.v.shell_error ~= 0 then
+                  return
+                end
+                return module:gsub("\n", ",")
+              end)(),
               -- codelenses = { gc_details = false },
               usePlaceholders = true,
               buildFlags = { '-tags=integration' },
@@ -372,9 +408,9 @@ require('lazy').setup({
       require('mason-lspconfig').setup {
         handlers = {
           function(server_name)
-            if server_name == "tsserver" then
-              server_name = "ts_ls"
-            end
+            -- if server_name == "tsserver" then
+            --   server_name = "ts_ls"
+            -- end
             local server = servers[server_name] or {}
             server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
             require('lspconfig')[server_name].setup(server)
@@ -922,6 +958,21 @@ require('lazy').setup({
 
         },
         agents = {
+          {
+            provider = "ollama",
+            name = "Codellama-7B-code",
+            chat = true,
+            command = false,
+            -- string with model name or table with model name and parameters
+            model = {
+              model = "codellama:7b-code",
+              temperature = 0.2,
+              top_p = 1,
+              min_p = 0.05,
+            },
+            -- system prompt (use this to specify the persona/role of the AI)
+            system_prompt = "You are a AI code assistant.",
+          },
           {
             provider = "ollama",
             name = "ChatOllamaLlama3.1-8B",
