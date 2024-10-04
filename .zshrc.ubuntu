@@ -23,6 +23,7 @@ alias vim="/usr/local/bin/nvim"
 alias etf="clippaste > output.json && ~/personal/etf-crawl/etf-crawler calc | clipcopy"
 alias pa="~/Downloads/Postman\ Agent/Postman\ Agent &"
 alias generate="/home/wuilliam/personal/ai-promt-code-gen/generate_output.sh"
+alias ai="/home/wuilliam/personal/ai-shell/ai"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
