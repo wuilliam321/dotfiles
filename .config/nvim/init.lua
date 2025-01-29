@@ -181,7 +181,7 @@ require('lazy').setup({
       pcall(require('telescope').load_extension, 'ui-select')
 
       local builtin = require 'telescope.builtin'
-      vim.keymap.set('n', '<leader>ff', vim.cmd.Ex, { desc = '[F]ind [F]iles' })
+      vim.keymap.set('n', '<leader>ff', '<cmd>Oil<cr>', { desc = '[F]ind [F]iles' })
       vim.keymap.set('n', '<leader>pf', function()
         builtin.find_files { hidden = true }
       end, { desc = '[P]roject [F]iles' })
@@ -239,28 +239,23 @@ require('lazy').setup({
       { 'j-hui/fidget.nvim', opts = {} },
     },
     config = function()
-        vim.api.nvim_create_autocmd("BufWritePre", {
-          pattern = "*.go",
-          callback = function()
-            local params = vim.lsp.util.make_range_params()
-            params.context = { only = { "source.organizeImports" } }
-            -- buf_request_sync defaults to a 1000ms timeout. Depending on your
-            -- machine and codebase, you may want longer. Add an additional
-            -- argument after params if you find that you have to write the file
-            -- twice for changes to be saved.
-            -- E.g., vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, 3000)
-            local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params)
-            for cid, res in pairs(result or {}) do
-              for _, r in pairs(res.result or {}) do
-                if r.edit then
-                  local enc = (vim.lsp.get_client_by_id(cid) or {}).offset_encoding or "utf-16"
-                  vim.lsp.util.apply_workspace_edit(r.edit, enc)
-                end
+      vim.api.nvim_create_autocmd("BufWritePre", {
+        pattern = "*.go",
+        callback = function()
+          local params = vim.lsp.util.make_range_params()
+          params.context = { only = { "source.organizeImports" } }
+          local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params)
+          for cid, res in pairs(result or {}) do
+            for _, r in pairs(res.result or {}) do
+              if r.edit then
+                local enc = (vim.lsp.get_client_by_id(cid) or {}).offset_encoding or "utf-16"
+                vim.lsp.util.apply_workspace_edit(r.edit, enc)
               end
             end
-            vim.lsp.buf.format({ async = false })
           end
-        })
+          vim.lsp.buf.format({ async = false })
+        end
+      })
 
       local border = {
         { '┌', 'FloatBorder' },
@@ -367,7 +362,7 @@ require('lazy').setup({
           },
         },
         golangci_lint_ls = {
-          -- cmd = { '/Users/wlacruz/go/bin/golangci-lint' },
+          cmd = { '/Users/wlacruz/go/bin/golangci-lint' },
         },
         lua_ls = {
           -- cmd = {...},
@@ -555,8 +550,10 @@ require('lazy').setup({
     event = 'VimEnter',
     dependencies = { 'tyru/current-func-info.vim' },
     config = function()
-      vim.keymap.set('n', '<leader>da', '<cmd>call vimspector#LaunchWithSettings( #{ configuration: "app" } )<cr>', { desc = '[D]ebug [A]ll' })
-      vim.keymap.set('n', '<leader>df', '<cmd>call vimspector#LaunchWithSettings( #{ configuration: "file" } )<cr>', { desc = '[D]ebug [F]ile' })
+      vim.keymap.set('n', '<leader>da', '<cmd>call vimspector#LaunchWithSettings( #{ configuration: "app" } )<cr>',
+        { desc = '[D]ebug [A]ll' })
+      vim.keymap.set('n', '<leader>df', '<cmd>call vimspector#LaunchWithSettings( #{ configuration: "file" } )<cr>',
+        { desc = '[D]ebug [F]ile' })
       vim.keymap.set('n', '<leader>ds', '<cmd>VimspectorReset<cr>', { desc = '[D]ebug [S]top' })
       vim.keymap.set('n', '<leader>bp', '<cmd>call vimspector#ToggleBreakpoint()<cr>', { desc = '[B]reak [P]oint' })
       vim.keymap.set('n', '<leader>dn', '<cmd>call vimspector#StepOver()<cr>', { desc = '[D]ebug [N]ext' })
@@ -702,7 +699,7 @@ require('lazy').setup({
       }
 
       vim.opt.termguicolors = true
-      vim.cmd.colorscheme 'catppuccin'
+      vim.cmd.colorscheme 'tokyonight-night' -- tokyonight-night catppuccin
     end,
   },
   {
@@ -825,7 +822,8 @@ require('lazy').setup({
       harpoon:setup()
 
       vim.keymap.set("n", "<leader>mb", function() harpoon:list():add() end, { desc = '[M]ark [B]uffer' })
-      vim.keymap.set("n", "<leader>mm", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, { desc = '[M]arks [M]enu' })
+      vim.keymap.set("n", "<leader>mm", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end,
+        { desc = '[M]arks [M]enu' })
 
       vim.keymap.set("n", "<leader>mu", function() harpoon:list():select(1) end, { desc = 'Go [M]ark [U]' })
       vim.keymap.set("n", "<leader>me", function() harpoon:list():select(2) end, { desc = 'Go [M]ark [E]' })
@@ -995,43 +993,18 @@ require('lazy').setup({
       -- Setup shortcuts here (see Usage > Shortcuts in the Documentation/Readme)
     end,
   },
+
   {
-    'wuilliam321/nvim-autorun',
-    dir = '~/personal/nvim-autorun',
-    config = function()
-      vim.defer_fn(function()
-        local w = math.floor(vim.api.nvim_win_get_width(0))
-        local h = math.floor(vim.api.nvim_win_get_height(0) / 4)
-        --- @diagnostic disable-next-line: redundant-parameter
-        require('autorun').setup({
-          show_returns = true,
-          run_on_save = false,
-          window = {
-            relative = 'editor',
-            height = h,
-            width = w,
-            top = h * 3,
-            left = 0,
-            style = 'minimal',
-            border = 'double',
-            transparent = 10,
-          }
-        })
-        -- vim.keymap.set('n', '<leader>ta', ':GoTestAll<cr>')
-        -- vim.keymap.set('n', '<leader>tm', ':GoTestMethod<cr>')
-        -- vim.keymap.set('n', '<leader>td', ':GoTestDiag<cr>')
-      end, 2000)
-    end
+    'stevearc/oil.nvim',
+    ---@module 'oil'
+    ---@type oil.SetupOpts
+    opts = {},
+    -- -- Optional dependencies
+    dependencies = { { "echasnovski/mini.icons", opts = {} } },
+    -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
+    -- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
+    lazy = false,
   },
-  -- {
-  --   '/Users/wlacruz/personal/nvim-iso8583',
-  --   dir = '~/personal/nvim-iso8583',
-  --   config = function()
-  --     require('iso8583').setup({
-  --       cmd = "/Users/wlacruz/work/parser/bin/iso8583",
-  --     })
-  --   end
-  -- },
 
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
