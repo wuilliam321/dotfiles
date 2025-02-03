@@ -12,6 +12,8 @@ return {
       { 'j-hui/fidget.nvim', opts = {} },
     },
     config = function()
+      vim.lsp.inlay_hint.enable()
+
       vim.api.nvim_create_autocmd("BufWritePre", {
         pattern = "*.go",
         callback = function()
@@ -132,14 +134,15 @@ return {
               -- codelenses = { gc_details = false },
               usePlaceholders = true,
               buildFlags = { '-tags=integration' },
-              -- hints = {
-              --     -- assignVariableTypes = true,
-              --     compositeLiteralFields = true,
-              --     constantValues = true,
-              --     -- functionTypeParameters = true, -- generics not needed for now
-              --     parameterNames = true,
-              --     rangeVariableTypes = true
-              -- }
+              hints = {
+                -- assignVariableTypes = true,
+                compositeLiteralFields = true,
+                -- compositeLiteralTypes = true,
+                -- constantValues = true,
+                -- functionTypeParameters = true, -- generics not needed for now
+                parameterNames = true,
+                rangeVariableTypes = true
+              }
             },
           },
         },
