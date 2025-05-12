@@ -37,12 +37,14 @@ vim.g.netrw_sort_by = 'time'
 vim.g.netrw_sort_direction = 'reverse'
 vim.g.netrw_sort_options = 'i'
 
+vim.g.vimspector_variables_display_mode = 'full'
+
 -- mit proxy
 -- vim.g.copilot_proxy = 'http://localhost:15432'
 
 -- ollama-copilot
-vim.g.copilot_proxy = 'http://localhost:11435'
-vim.g.copilot_proxy_strict_ssl = false
+-- vim.g.copilot_proxy = 'http://localhost:11435'
+-- vim.g.copilot_proxy_strict_ssl = false
 
 vim.opt.inccommand = 'split'
 vim.opt.cursorline = true

@@ -4,9 +4,6 @@ return {
   'tpope/vim-repeat',
   {
     'mechatroner/rainbow_csv',
-    config = function()
-      vim.g.rcsv_delimiters = { "\t", ",", ";", "|" }
-    end
   },
   --{
   --  "rest-nvim/rest.nvim",
