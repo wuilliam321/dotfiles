@@ -1,6 +1,6 @@
 #!/bin/bash
 # fix the keyboard
-# xmodmap /home/wuilliam/.Xmodmap
+setxkbmap dvorak_custom
 
 # fix the scroll
 mouse=$(xinput list | grep 'Wheel Mouse')

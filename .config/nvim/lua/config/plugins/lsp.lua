@@ -3,10 +3,6 @@ return {
     -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
     dependencies = {
-      -- 'williamboman/mason.nvim',
-      -- 'williamboman/mason-lspconfig.nvim',
-      -- 'WhoIsSethDaniel/mason-tool-installer.nvim',
-
       -- Useful status updates for LSP.
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
       { 'j-hui/fidget.nvim', opts = {} },
@@ -109,7 +105,23 @@ return {
       }
 
       local servers = {
-        ts_ls = {},
+        vtsls = {
+          settings = {
+            vtsls = {
+              tsserver = {
+                globalPlugins = {
+                  {
+                    name = '@vue/typescript-plugin',
+                    languages = { 'vue' },
+                    configNamespace = 'typescript',
+                  }
+                },
+              },
+            },
+          },
+          filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
+        },
+        vue_ls = {},
         eslint = {},
         jsonls = {},
         pyright = {},
@@ -186,6 +198,8 @@ return {
       'Kaiser-Yang/blink-cmp-avante',
       'saghen/blink.compat',
       -- 'rafamadriz/friendly-snippets',
+      'Kaiser-Yang/blink-cmp-avante',
+      'saghen/blink.compat',
       'L3MON4D3/LuaSnip',
       version = 'v2.*'
     },

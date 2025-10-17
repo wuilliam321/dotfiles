@@ -47,3 +47,19 @@ set
 where
   global_entity_id = 'PY_UY'
   and vendor_id = '44688'
+
+## Keyboard
+put 'dvorak_custom' file in this location /usr/share/X11/xkb/symbols/dvorak_custom
+add this: 'English (Dvorak, Custom)' => 'dvorak_custom', to
+`/usr/share/console-setup/KeyboardNames.pl` in an english language
+
+in: `/etc/default/keyboard` add these lines:
+
+```
+XKBMODEL="kinesis"
+XKBLAYOUT="us"
+XKBVARIANT="dvorak_custom"
+XKBOPTIONS="lv3:menu_switch,compose:rctrl,terminate:ctrl_alt_bksp"
+
+BACKSPACE="guess"
+```

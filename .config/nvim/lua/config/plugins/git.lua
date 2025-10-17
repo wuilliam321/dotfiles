@@ -6,7 +6,7 @@ return {
       vim.keymap.set('n', '<leader>ghu', '@<Plug>(GitGutterUndoHunk)')
       vim.keymap.set('n', '<leader>ghs', '@<Plug>(GitGutterStageHunk)')
       vim.keymap.set('x', '<leader>ghs', '@<Plug>(GitGutterStageHunk)')
-      vim.cmd([[GitGutterSignsDisable]])
+      vim.cmd([[GitGutterLineNrHighlightsEnable]])
     end,
   },
   {
