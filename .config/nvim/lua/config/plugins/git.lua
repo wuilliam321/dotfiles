@@ -15,4 +15,14 @@ return {
       vim.keymap.set('n', '<leader>gs', vim.cmd.G, { desc = '[G]it [S]tatus' })
     end,
   },
+  {
+    'lewis6991/gitsigns.nvim',
+    opts = {
+      signs = {
+        delete = { text = '_' },
+        topdelete = { text = '‾' },
+        changedelete = { text = '~' },
+      },
+    },
+  },
 }

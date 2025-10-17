@@ -3,17 +3,11 @@ return {
     -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
     dependencies = {
-      'williamboman/mason.nvim',
-      'williamboman/mason-lspconfig.nvim',
-      'WhoIsSethDaniel/mason-tool-installer.nvim',
-
       -- Useful status updates for LSP.
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
       { 'j-hui/fidget.nvim', opts = {} },
     },
     config = function()
-      vim.lsp.inlay_hint.enable()
-
       vim.api.nvim_create_autocmd("BufWritePre", {
         pattern = "*.go",
         callback = function()
@@ -55,6 +49,9 @@ return {
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
         callback = function(event)
+          vim.lsp.inlay_hint.enable()
+          vim.cmd.hi 'LspInlayHint gui=none,italic'
+
           local map = function(keys, func, desc)
             vim.keymap.set('n', keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
           end
@@ -64,7 +61,7 @@ return {
           vim.keymap.set('n', ']d', function() vim.diagnostic.jump({ count = 1 }) end,
             { desc = 'Go to next [D]iagnostic message' })
           vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float,
-            { desc = 'Show diagnostic [E]rror messages' })
+            { desc = 'Show [D]iagnostic [F]loat error messages' })
           vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist,
             { desc = 'Open diagnostic [Q]uickfix list' })
 
@@ -99,29 +96,25 @@ return {
         end,
       })
 
-      local capabilities = vim.lsp.protocol.make_client_capabilities()
-      --- @diagnostic disable-next-line: cast-local-type
-      capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
-
-
-      -- LSP settings (for overriding per client)
-      -- local handlers = {
-      --   ["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = border }),
-      --   ["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = border }),
-      -- }
+      vim.filetype.add {
+        pattern = {
+          ['swagger.*%.ya?ml'] = 'yaml.openapi',
+          ['openapi.*%.ya?ml'] = 'yaml.openapi',
+          ['openapi.*%.json'] = 'json.openapi',
+        },
+      }
 
       local servers = {
         ts_ls = {},
         eslint = {},
         jsonls = {},
-        pylsp = {},
+        pyright = {},
+        vacuum = {},
         gopls = {
-          -- handlers = handlers,
-          -- cmd = { '/Users/wlacruz/go/bin/gopls' },
+          cmd = { '/Users/wlacruz/go/bin/gopls' },
           settings = {
             gopls = {
               ["formatting.local"] = (function()
-                -- organize imports in groups
                 if vim.fn.executable("go") ~= 1 then
                   return
                 end
@@ -131,15 +124,10 @@ return {
                 end
                 return module:gsub("\n", ",")
               end)(),
-              -- codelenses = { gc_details = false },
               usePlaceholders = true,
               buildFlags = { '-tags=integration' },
               hints = {
-                -- assignVariableTypes = true,
                 compositeLiteralFields = true,
-                -- compositeLiteralTypes = true,
-                -- constantValues = true,
-                -- functionTypeParameters = true, -- generics not needed for now
                 parameterNames = true,
                 rangeVariableTypes = true
               }
@@ -147,161 +135,167 @@ return {
           },
         },
         golangci_lint_ls = {
-          -- cmd = { '/Users/wlacruz/go/bin/golangci-lint' },
+          cmd = { '/Users/wlacruz/go/bin/golangci-lint-langserver' },
         },
         lua_ls = {
-          -- cmd = {...},
-          -- filetypes { ...},
-          -- capabilities = {},
           settings = {
             Lua = {
               runtime = { version = 'LuaJIT' },
               workspace = {
                 checkThirdParty = false,
-                -- Tells lua_ls where to find all the Lua files that you have loaded
-                -- for your neovim configuration.
                 library = {
                   '${3rd}/luv/library',
                   unpack(vim.api.nvim_get_runtime_file('', true)),
                 },
-                -- If lua_ls is really slow on your computer, you can try this instead:
-                -- library = { vim.env.VIMRUNTIME },
               },
               completion = {
                 callSnippet = 'Replace',
               },
-              -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-              -- diagnostics = { disable = { 'missing-fields' } },
             },
           },
         },
       }
 
-      require('mason').setup()
+      local lspconfig = require'lspconfig'
+      for server, config in pairs(servers) do
+        lspconfig[server].setup(config or {})
+      end
 
-      local ensure_installed = vim.tbl_keys(servers or {})
-      vim.list_extend(ensure_installed, {
-        'stylua', -- Used to format lua code
+      vim.lsp.config("*", {
+        capabilities = vim.lsp.protocol.make_client_capabilities()
       })
-      require('mason-tool-installer').setup { ensure_installed = ensure_installed }
-
-      require('mason-lspconfig').setup {
-        handlers = {
-          function(server_name)
-            -- if server_name == "tsserver" then
-            --   server_name = "ts_ls"
-            -- end
-            local server = servers[server_name] or {}
-            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            require('lspconfig')[server_name].setup(server)
-          end,
-        },
-      }
     end,
   },
   {
-    'hrsh7th/nvim-cmp',
-    event = 'InsertEnter',
-    dependencies = {
-      -- Snippet Engine & its associated nvim-cmp source
-      {
-        'L3MON4D3/LuaSnip',
-        build = (function()
-          -- Build Step is needed for regex support in snippets
-          -- This step is not supported in many windows environments
-          -- Remove the below condition to re-enable on windows
-          if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then
-            return
-          end
-          return 'make install_jsregexp'
-        end)(),
-      },
-      'saadparwaiz1/cmp_luasnip',
-      'hrsh7th/cmp-nvim-lsp',
-      'hrsh7th/cmp-path',
-      'hrsh7th/cmp-buffer',
-    },
-    config = function()
-      local cmp = require 'cmp'
-      local luasnip = require 'luasnip'
-      luasnip.config.setup {}
-
-      cmp.setup {
-        snippet = {
-          expand = function(args)
-            luasnip.lsp_expand(args.body)
-          end,
-        },
-        completion = { completeopt = 'menu,menuone,noinsert' },
-        mapping = cmp.mapping.preset.insert {
-          ['<C-n>'] = cmp.mapping.select_next_item(),
-          ['<C-p>'] = cmp.mapping.select_prev_item(),
-          ['<C-y>'] = cmp.mapping.confirm { select = true },
-          ['<C-e>'] = cmp.mapping.abort(),
-          ['<C-Space>'] = cmp.mapping.complete {},
-          -- <c-l> will move you to the right of each of the expansion locations.
-          -- <c-h> is similar, except moving you backwards.
-          ['<C-l>'] = cmp.mapping(function()
-            if luasnip.expand_or_locally_jumpable() then
-              luasnip.expand_or_jump()
-            end
-          end, { 'i', 's' }),
-          ['<C-h>'] = cmp.mapping(function()
-            if luasnip.locally_jumpable(-1) then
-              luasnip.jump(-1)
-            end
-          end, { 'i', 's' }),
-        },
-        sources = {
-          { name = 'nvim_lsp' },
-          { name = 'luasnip' },
-          { name = 'path' },
-          { name = 'buffer' },
-          { name = 'cmp_tabnine' },
-        },
-        formatting = {
-          -- onsails/lspkind-nvim
-          format = function(entry, vim_item)
-            local source_mapping = {
-              buffer = '[Buffer]',
-              nvim_lsp = '[LSP]',
-              nvim_lua = '[Lua]',
-              cmp_tabnine = '[TN]',
-              luasnip = '[Snippet]',
-              path = '[Path]',
-            }
-
-            -- local lspkind = require('lspkind')
-            -- if not lspkind then
-            --   return
-            -- end
-            --
-            -- vim_item.kind = lspkind.symbolic(vim_item.kind, {
-            --   mode = "symbol",
-            --   ellipsis_char = '...',
-            -- })
-            vim_item.menu = source_mapping[entry.source.name]
-            if entry.source.name == "cmp_tabnine" then
-              local detail = (entry.completion_item.labelDetails or {}).detail
-              vim_item.kind = ""
-              if detail and detail:find('.*%%.*') then
-                vim_item.kind = vim_item.kind .. ' ' .. detail
-              end
-
-              if (entry.completion_item.data or {}).multiline then
-                vim_item.kind = vim_item.kind .. ' ' .. '[ML]'
-              end
-            end
-            local maxwidth = 50
-            vim_item.abbr = string.sub(vim_item.abbr, 1, maxwidth)
-            return vim_item
-          end,
-        },
-        window = {
-          completion = cmp.config.window.bordered(),
-          documentation = cmp.config.window.bordered(),
-        },
-      }
-    end,
+    'saghen/blink.compat',
+    -- use v2.* for blink.cmp v1.*
+    version = '2.*',
+    -- lazy.nvim will automatically load the plugin when it's required by blink.cmp
+    lazy = true,
+    -- make sure to set opts so that lazy.nvim calls blink.compat's setup
+    opts = {},
   },
+  {
+    'saghen/blink.cmp',
+    -- optional: provides snippets for the snippet source
+    dependencies = {
+      'Kaiser-Yang/blink-cmp-avante',
+      'saghen/blink.compat',
+      -- 'rafamadriz/friendly-snippets',
+      'L3MON4D3/LuaSnip',
+      version = 'v2.*'
+    },
+
+    -- use a release tag to download pre-built binaries
+    version = '1.*',
+    -- AND/OR build from source, requires nightly: https://rust-lang.github.io/rustup/concepts/channels.html#working-with-nightly-rust
+    -- build = 'cargo build --release',
+    -- If you use nix, you can build from source using latest nightly rust with:
+    -- build = 'nix run .#build-plugin',
+
+    ---@module 'blink.cmp'
+    ---@type blink.cmp.Config
+    opts = {
+      -- 'default' (recommended) for mappings similar to built-in completions (C-y to accept)
+      -- 'super-tab' for mappings similar to vscode (tab to accept)
+      -- 'enter' for enter to accept
+      -- 'none' for no mappings
+      --
+      -- All presets have the following mappings:
+      -- C-space: Open menu or open docs if already open
+      -- C-n/C-p or Up/Down: Select next/previous item
+      -- C-e: Hide menu
+      -- C-k: Toggle signature help (if signature.enabled = true)
+      --
+      -- See :h blink-cmp-config-keymap for defining your own keymap
+      keymap = {
+        preset = 'default',
+        ['<C-l>'] = { 'snippet_forward', 'fallback' },
+        ['<C-h>'] = { 'snippet_backward', 'fallback' },
+      },
+
+      appearance = {
+        -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
+        -- Adjusts spacing to ensure icons are aligned
+        nerd_font_variant = 'normal'
+      },
+
+      -- (Default) Only show the documentation popup when manually triggered
+      signature = {
+        enabled = true,
+        window = {
+          show_documentation = false,
+          border = "rounded",
+        },
+      },
+      completion = {
+        documentation = {
+          auto_show = true,
+          window = {
+            border = "rounded",
+          },
+        },
+        ghost_text = {
+          enabled = false,
+          show_with_menu = true,
+        },
+        menu = {
+          border = "rounded",
+          auto_show = true,
+          draw = {
+            columns = {
+              { 'label', 'label_description', gap = 1 }, { 'kind_icon', 'kind' }
+            },
+            treesitter = { 'lsp' },
+          },
+        },
+      },
+
+      snippets = { preset = 'luasnip' },
+
+      -- Default list of enabled providers defined so that you can extend it
+      -- elsewhere in your config, without redefining it, due to `opts_extend`
+      sources = {
+        -- default = { 'lsp', 'path', 'snippets', 'buffer', "avante_commands", "avante_mentions", "avante_files" },
+        -- default = { 'lsp', 'path', 'snippets', 'buffer'},
+        default = { 'avante', 'lsp', 'path', 'snippets', 'buffer' },
+        providers = {
+          avante = {
+            module = "blink-cmp-avante",
+            name = "Avante",
+            opts = {
+              -- options for blink-cmp-avante
+            },
+          },
+
+          -- avante_commands = {
+          --   name = "avante_commands",
+          --   module = "blink.compat.source",
+          --   score_offset = 90, -- show at a higher priority than lsp
+          --   opts = {},
+          -- },
+          -- avante_files = {
+          --   name = "avante_files",
+          --   module = "blink.compat.source",
+          --   score_offset = 100, -- show at a higher priority than lsp
+          --   opts = {},
+          -- },
+          -- avante_mentions = {
+          --   name = "avante_mentions",
+          --   module = "blink.compat.source",
+          --   score_offset = 1000, -- show at a higher priority than lsp
+          --   opts = {},
+          -- }
+        },
+      },
+
+      -- (Default) Rust fuzzy matcher for typo resistance and significantly better performance
+      -- You may use a lua implementation instead by using `implementation = "lua"` or fallback to the lua implementation,
+      -- when the Rust fuzzy matcher is not available, by using `implementation = "prefer_rust"`
+      --
+      -- See the fuzzy documentation for more information
+      fuzzy = { implementation = "prefer_rust_with_warning" }
+    },
+    opts_extend = { "sources.default" }
+  }
 }

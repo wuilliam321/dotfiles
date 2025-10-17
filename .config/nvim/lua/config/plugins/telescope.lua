@@ -56,7 +56,8 @@ return {
       pcall(require('telescope').load_extension, 'ui-select')
 
       local builtin = require 'telescope.builtin'
-      vim.keymap.set('n', '<leader>ff', '<cmd>Oil<cr>', { desc = '[F]ind [F]iles' })
+      -- vim.keymap.set('n', '<leader>ff', '<cmd>Oil<cr>', { desc = '[F]ind [F]iles' })
+      vim.keymap.set('n', '<leader>ff', ':Ex<cr>', { desc = '[F]ind [F]iles' })
       vim.keymap.set('n', '<leader>pf', function()
         builtin.find_files { hidden = true }
       end, { desc = '[P]roject [F]iles' })

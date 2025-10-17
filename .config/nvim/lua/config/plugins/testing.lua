@@ -1,70 +1,73 @@
 return {
-  {
-    "nvim-neotest/neotest",
-    dependencies = {
-      "nvim-neotest/nvim-nio",
-      "nvim-lua/plenary.nvim",
-      "antoinemadec/FixCursorHold.nvim",
-      "nvim-treesitter/nvim-treesitter",
-
-      "nvim-neotest/neotest-go",
-      'nvim-neotest/neotest-jest',
-    },
-    config = function()
-      -- get neotest namespace (api call creates or returns namespace)
-      local neotest_ns = vim.api.nvim_create_namespace("neotest")
-      -- vim.diagnostic.config({
-      --   virtual_text = {
-      --     format = function(diagnostic)
-      --       local message =
-      --           diagnostic.message:gsub("\n", " "):gsub("\t", " "):gsub("%s+", " "):gsub("^%s+", "")
-      --       return message
-      --     end,
-      --   },
-      -- }, neotest_ns)
-
-      local nt = require("neotest")
-
-      nt.setup({
-        adapters = {
-          require("neotest-go")({
-            experimental = {
-              test_table = true,
-            },
-            -- args = { "-short" }
-            -- args = { "-count=1", "-timeout=60s" }
-          }),
-          require('neotest-jest')({
-            jestCommand = "npm test --",
-            jestConfigFile = "jest.config.js",
-            env = { CI = true },
-            cwd = function(path)
-              return vim.fn.getcwd()
-            end,
-          }),
-        },
-      })
-
-      vim.keymap.set('n', '<leader>ta', function()
-        nt.run.run({ path = vim.fn.getcwd() })
-        nt.summary.open()
-      end, { desc = '[T]est [A]ll' })
-      vim.keymap.set('n', '<leader>tm', function()
-        nt.run.run()
-        nt.summary.open()
-      end, { desc = '[T]est [M]ethod' })
-      vim.keymap.set('n', '<leader>tf', function()
-        nt.run.run(vim.fn.expand("%"))
-        -- nt.run.run({ vim.fn.expand("%"), extra_args = { "-short" } })
-        nt.summary.open()
-      end, { desc = '[T]est [F]ile' })
-      vim.keymap.set('n', '<leader>ts', function()
-        nt.run.stop()
-        nt.summary.close()
-      end, { desc = '[T]est [S]top' })
-
-      vim.keymap.set('n', '[n', function() nt.jump.prev({ status = "failed" }) end)
-      vim.keymap.set('n', ']n', function() nt.jump.next({ status = "failed" }) end)
-    end,
-  },
+  -- {
+  --   "nvim-neotest/neotest",
+  --   dependencies = {
+  --     "nvim-neotest/nvim-nio",
+  --     "nvim-lua/plenary.nvim",
+  --     "antoinemadec/FixCursorHold.nvim",
+  --     "nvim-treesitter/nvim-treesitter",
+  --
+  --     "nvim-neotest/neotest-go",
+  --     'nvim-neotest/neotest-jest',
+  --   },
+  --   config = function()
+  --     -- get neotest namespace (api call creates or returns namespace)
+  --     local neotest_ns = vim.api.nvim_create_namespace("neotest")
+  --     -- vim.diagnostic.config({
+  --     --   virtual_text = {
+  --     --     format = function(diagnostic)
+  --     --       local message =
+  --     --           diagnostic.message:gsub("\n", " "):gsub("\t", " "):gsub("%s+", " "):gsub("^%s+", "")
+  --     --       return message
+  --     --     end,
+  --     --   },
+  --     -- }, neotest_ns)
+  --
+  --     local nt = require("neotest")
+  --
+  --     nt.setup({
+  --       adapters = {
+  --         require("neotest-go")({
+  --           experimental = {
+  --             test_table = true,
+  --           },
+  --           -- args = { "-short" }
+  --           -- args = { "-count=1", "-timeout=60s" }
+  --         }),
+  --         require('neotest-jest')({
+  --           jestCommand = "npm test --",
+  --           jestConfigFile = "jest.config.js",
+  --           env = { CI = true },
+  --           cwd = function(path)
+  --             return vim.fn.getcwd()
+  --           end,
+  --         }),
+  --       },
+  --     })
+  --
+  --     vim.keymap.set('n', '<leader>to', function()
+  --       vim.cmd("Neotest output")
+  --     end, { desc = 'Show output' })
+  --     vim.keymap.set('n', '<leader>ta', function()
+  --       nt.run.run({ path = vim.fn.getcwd() })
+  --       nt.summary.open()
+  --     end, { desc = '[T]est [A]ll' })
+  --     vim.keymap.set('n', '<leader>tm', function()
+  --       nt.run.run()
+  --       nt.summary.open()
+  --     end, { desc = '[T]est [M]ethod' })
+  --     vim.keymap.set('n', '<leader>tf', function()
+  --       nt.run.run(vim.fn.expand("%"))
+  --       -- nt.run.run({ vim.fn.expand("%"), extra_args = { "-short" } })
+  --       nt.summary.open()
+  --     end, { desc = '[T]est [F]ile' })
+  --     vim.keymap.set('n', '<leader>ts', function()
+  --       nt.run.stop()
+  --       nt.summary.close()
+  --     end, { desc = '[T]est [S]top' })
+  --
+  --     vim.keymap.set('n', '[n', function() nt.jump.prev({ status = "failed" }) end)
+  --     vim.keymap.set('n', ']n', function() nt.jump.next({ status = "failed" }) end)
+  --   end,
+  -- },
 }

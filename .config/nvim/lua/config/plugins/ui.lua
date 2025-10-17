@@ -1,4 +1,13 @@
 return {
+  -- {
+  --   'MeanderingProgrammer/render-markdown.nvim',
+  --   -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.nvim' }, -- if you use the mini.nvim suite
+  --   dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
+  --   -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
+  --   ---@module 'render-markdown'
+  --   ---@type render.md.UserConfig
+  --   opts = {},
+  -- },
   'tpope/vim-commentary',
   { 'numToStr/Comment.nvim', opts = {} },
   {
@@ -12,52 +21,42 @@ return {
       require('todo-comments').setup {}
     end,
   },
-  {                     -- Useful plugin to show you pending keybinds.
-    'folke/which-key.nvim',
-    event = 'VeryLazy', -- Sets the loading event to 'VimEnter'
-  },
-  {
-    'nvim-lualine/lualine.nvim',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
-    config = function()
-      require('lualine').setup({
-        extensions = { 'quickfix', 'fugitive' },
-        sections = {
-          lualine_c = {
-            -- {
-            --   'buffers',
-            --   show_filename_only = false,
-            -- },
-            {
-              'filename',
-              path = 1,
-            }
-          },
-        }
-      })
-    end
-  },
-  {
-    'lewis6991/gitsigns.nvim',
-    opts = {
-      signs = {
-        delete = { text = '_' },
-        topdelete = { text = '‾' },
-        changedelete = { text = '~' },
-      },
-    },
-  },
-  {
-    'stevearc/oil.nvim',
-    ---@module 'oil'
-    ---@type oil.SetupOpts
-    opts = {},
-    -- -- Optional dependencies
-    dependencies = { { "echasnovski/mini.icons", opts = {} } },
-    -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
-    -- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
-    lazy = false,
-  },
+  -- {                     -- Useful plugin to show you pending keybinds.
+  --   'folke/which-key.nvim',
+  --   event = 'VeryLazy', -- Sets the loading event to 'VimEnter'
+  -- },
+  -- {
+  --   'nvim-lualine/lualine.nvim',
+  --   dependencies = { 'nvim-tree/nvim-web-devicons' },
+  --   config = function()
+  --     require('lualine').setup({
+  --       extensions = { 'quickfix', 'fugitive' },
+  --       sections = {
+  --         lualine_c = {
+  --           -- {
+  --           --   'buffers',
+  --           --   show_filename_only = false,
+  --           -- },
+  --           {
+  --             'filename',
+  --             path = 1,
+  --           }
+  --         },
+  --       }
+  --     })
+  --   end
+  -- },
+  --{
+  --  'stevearc/oil.nvim',
+  --  ---@module 'oil'
+  --  ---@type oil.SetupOpts
+  --  opts = {},
+  --  -- -- Optional dependencies
+  --  dependencies = { { "echasnovski/mini.icons", opts = {} } },
+  --  -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
+  --  -- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
+  --  lazy = false,
+  --},
   {
     'ThePrimeagen/harpoon',
     branch = "harpoon2",
