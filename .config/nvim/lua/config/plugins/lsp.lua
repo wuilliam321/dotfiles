@@ -121,7 +121,6 @@ return {
           },
           filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
         },
-        vue_ls = {},
         eslint = {},
         jsonls = {},
         pyright = {},
@@ -172,9 +171,9 @@ return {
         },
       }
 
-      local lspconfig = require'lspconfig'
       for server, config in pairs(servers) do
-        lspconfig[server].setup(config or {})
+        vim.lsp.config(server, config or {})
+        vim.lsp.enable(server)
       end
 
       vim.lsp.config("*", {
