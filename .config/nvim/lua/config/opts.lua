@@ -41,7 +41,7 @@ vim.g.netrw_sort_options = 'i'
 vim.g.vimspector_variables_display_mode = 'full'
 
 -- mit proxy
--- vim.g.copilot_proxy = 'http://localhost:15432'
+-- vim.g.copilot_proxy = 'https://genai.melioffice.com'
 
 -- ollama-copilot
 -- vim.g.copilot_proxy = 'http://localhost:11435'
@@ -50,6 +50,10 @@ vim.g.vimspector_variables_display_mode = 'full'
 vim.opt.inccommand = 'split'
 vim.opt.cursorline = true
 vim.opt.cursorcolumn = true
-vim.opt.colorcolumn = { 100, 140 }
+vim.opt.colorcolumn = { 80, 100 }
 vim.opt.scrolloff = 10
 vim.opt.hlsearch = true
+
+vim.opt.exrc = true
+
+vim.opt.conceallevel = 2
