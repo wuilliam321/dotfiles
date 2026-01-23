@@ -1,10 +1,10 @@
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
--- TIP: Disable arrow keys in normal mode
-vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
-vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
-vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
-vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
+-- -- TIP: Disable arrow keys in normal mode
+-- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
+-- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
+-- vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
+-- vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
 
 vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
@@ -31,6 +31,14 @@ vim.keymap.set({ "n", "v" }, "<leader>p", [["+p]])
 
 vim.keymap.set("x", "<leader>P", [["_dP]])
 vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]])
+
+-- Main keymaps
+vim.keymap.set('n', '<leader>ff', ':Ex<cr>')
+vim.keymap.set('n', '<C-n>', '<cmd>cnext<cr>zz')
+vim.keymap.set('n', '<C-p>', '<cmd>cprev<cr>zz')
+vim.keymap.set('n', 'n', 'nzz')
+vim.keymap.set('n', 'b', 'bzz')
+
 
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',

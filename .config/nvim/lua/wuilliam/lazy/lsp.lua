@@ -8,23 +8,23 @@ return {
       { 'j-hui/fidget.nvim', opts = {} },
     },
     config = function()
-      vim.api.nvim_create_autocmd("BufWritePre", {
-        pattern = "*.go",
-        callback = function()
-          local params = vim.lsp.util.make_range_params()
-          params.context = { only = { "source.organizeImports" } }
-          local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params)
-          for cid, res in pairs(result or {}) do
-            for _, r in pairs(res.result or {}) do
-              if r.edit then
-                local enc = (vim.lsp.get_client_by_id(cid) or {}).offset_encoding or "utf-16"
-                vim.lsp.util.apply_workspace_edit(r.edit, enc)
-              end
-            end
-          end
-          vim.lsp.buf.format({ async = false })
-        end
-      })
+      -- vim.api.nvim_create_autocmd("BufWritePre", {
+      --   pattern = "*.go",
+      --   callback = function()
+      --     local params = vim.lsp.util.make_range_params()
+      --     params.context = { only = { "source.organizeImports" } }
+      --     local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params)
+      --     for cid, res in pairs(result or {}) do
+      --       for _, r in pairs(res.result or {}) do
+      --         if r.edit then
+      --           local enc = (vim.lsp.get_client_by_id(cid) or {}).offset_encoding or "utf-16"
+      --           vim.lsp.util.apply_workspace_edit(r.edit, enc)
+      --         end
+      --       end
+      --     end
+      --     vim.lsp.buf.format({ async = false })
+      --   end
+      -- })
 
       local border = {
         { '┌', 'FloatBorder' },
@@ -152,23 +152,12 @@ return {
         golangci_lint_ls = {
           cmd = { '/Users/wlacruz/go/bin/golangci-lint-langserver' },
         },
-        lua_ls = {
-          settings = {
-            Lua = {
-              runtime = { version = 'LuaJIT' },
-              workspace = {
-                checkThirdParty = false,
-                library = {
-                  '${3rd}/luv/library',
-                  unpack(vim.api.nvim_get_runtime_file('', true)),
-                },
-              },
-              completion = {
-                callSnippet = 'Replace',
-              },
-            },
-          },
-        },
+        -- lua_ls = {
+        --   cmd = { '/opt/homebrew/bin/lua-language-server' },
+        --   settings = {
+        --     Lua = {},
+        --   },
+        -- },
       }
 
       for server, config in pairs(servers) do
