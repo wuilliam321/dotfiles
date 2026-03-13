@@ -1,10 +1,9 @@
 return {
   {
     'puremourning/vimspector',
-    event = 'VimEnter',
     dependencies = { 'tyru/current-func-info.vim' },
     config = function()
-      vim.keymap.set('n', '<leader>da', '<cmd>call vimspector#LaunchWithSettings( #{ configuration: "app" } )<cr>',
+      vim.keymap.set('n', '<leader>da', '<cmd>call vimspector#LaunchWithSettings( #{ configuration: "delve" } )<cr>',
         { desc = '[D]ebug [A]ll' })
       vim.keymap.set('n', '<leader>df', '<cmd>call vimspector#LaunchWithSettings( #{ configuration: "file" } )<cr>',
         { desc = '[D]ebug [F]ile' })
